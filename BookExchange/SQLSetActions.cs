@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace BookExchange
 {
@@ -14,15 +15,14 @@ namespace BookExchange
         public static void addBook(Book newBook)
         {
             String searchQuery = "INSERT INTO Books (ISBN, Title, Author, Descr, Published, Stock) " +
-                                 "VALUES ("+
-                                    newBook.ISBN+"," +
-                                    newBook.Name+"," +
-                                    newBook.Author+"," +
-                                    newBook.Description+"," +
-                                    newBook.Published +"," +
-                                    newBook.available+
-                                 ")";
-
+                                 "VALUES ('" +
+                                    newBook.ISBN + "','" +
+                                    newBook.Title + "','" +
+                                    newBook.Author + "','" +
+                                    newBook.Description + "','" +
+                                    newBook.Published + "'," +
+                                    newBook.Available + ")";
+            Debug.Print(searchQuery);
             using SqlConnection newConnection = new(SQLDetails);
             SqlCommand selectCommand = new(searchQuery, newConnection);
             selectCommand.Connection.Open();
@@ -40,12 +40,11 @@ namespace BookExchange
 
         public static void addUser(ExchangeUser newUser)
         {
-            String searchQuery = "INSERT INTO Books (UserID, Name, Email) " +
-                                 "VALUES (" +
-                                    newUser.UserID + "," +
-                                    newUser.Name + "," +
-                                    newUser.Email + 
-                                 ")";
+            String searchQuery = "INSERT INTO Users (UserID, Name, Email) " +
+                                 "VALUES ('" +
+                                    newUser.UserID + "','" +
+                                    newUser.Name + "','" +
+                                    newUser.Email + "')";
 
             using SqlConnection newConnection = new(SQLDetails);
             SqlCommand selectCommand = new(searchQuery, newConnection);
@@ -64,11 +63,10 @@ namespace BookExchange
 
         public static void addBorrowedBook(String userID, String book)
         {
-            String searchQuery = "INSERT INTO Borrowers (UserID, Book) " +
-                                 "VALUES (" +
-                                    userID + "," +
-                                    book + 
-                                 ")";
+            String searchQuery = "INSERT INTO Borrowers (UserID, BookISBN) " +
+                                 "VALUES ('" +
+                                    userID + "','" +
+                                    book + "')";
 
             using SqlConnection newConnection = new(SQLDetails);
             SqlCommand selectCommand = new(searchQuery, newConnection);
@@ -87,11 +85,10 @@ namespace BookExchange
 
         public static void addLoanedBook(String userID, String book)
         {
-            String searchQuery = "INSERT INTO Loaners (UserID, Book) " +
-                                 "VALUES (" +
-                                    userID + "," +
-                                    book +
-                                 ")";
+            String searchQuery = "INSERT INTO Loaners (UserID, BookISBN) " +
+                                 "VALUES ('" +
+                                    userID + "','" +
+                                    book + "')";
 
             using SqlConnection newConnection = new(SQLDetails);
             SqlCommand selectCommand = new(searchQuery, newConnection);
