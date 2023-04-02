@@ -2,7 +2,7 @@ namespace BookExchange
 {
     public class Book
     {
-        public String Name { get; set; }
+        public String Title { get; set; }
 
         public String Author { get; set; }
 
@@ -12,7 +12,7 @@ namespace BookExchange
 
         public String ISBN { get; set; }
 
-        public int available { get; set; }
+        public int Available { get; set; }
 
     }
 }
