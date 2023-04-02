@@ -2,14 +2,11 @@
 {
     public class ExchangeUser
     {
+        public String UserID { get; set; }
+
         public String Name { get; set; }
 
-        public String email { get; set; }
-
-        public List<String> borrowed { get; set; }
-
-        public List<String> loaned { get; set; }
-
-        public List<String> available { get; set; }
+        public String Email { get; set; }
     }
+
 }
