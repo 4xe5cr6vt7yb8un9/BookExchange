@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace BookExchange
 {
@@ -29,12 +30,12 @@ namespace BookExchange
                 {
                     selectBook = new Book
                     {
-                        Name = sqlReader.GetString(0),
-                        Author = sqlReader.GetString(1),
-                        Description = sqlReader.GetString(2),
-                        Published = sqlReader.GetString(3),
-                        available = Int32.Parse(sqlReader.GetString(4)),
-                        ISBN = sqlReader.GetString(5)
+                        Title = sqlReader.GetString(1),
+                        Author = sqlReader.GetString(2),
+                        Description = sqlReader.GetString(3),
+                        Published = sqlReader.GetString(4),
+                        Available = sqlReader.GetInt32(5),
+                        ISBN = sqlReader.GetString(0)
                     };
                     return selectBook;
                 }
@@ -45,6 +46,34 @@ namespace BookExchange
             }
             selectCommand.Connection.Close();
             return new Book();
+        }
+
+        public static bool verifyISBN(String ISBN)
+        {
+            String searchQuery = "SELECT * FROM Books WHERE ISBN = " + ISBN;
+
+            using SqlConnection newConnection = new(SQLDetails);
+            SqlCommand selectCommand = new(searchQuery, newConnection);
+            selectCommand.Connection.Open();
+
+            SqlDataReader sqlReader;
+            try
+            {
+                sqlReader = selectCommand.ExecuteReader();
+
+                if (sqlReader.Read())
+                {
+                    selectCommand.Connection.Close();
+                    return true;
+                }
+            }
+            catch
+            {
+                selectCommand.Connection.Close();
+                return false;
+            }
+            selectCommand.Connection.Close();
+            return true;
         }
 
         public static ExchangeUser getUserByQuery(String query)
@@ -65,7 +94,7 @@ namespace BookExchange
                 {
                     selectUser = new ExchangeUser
                     {
-                        UserID = sqlReader.GetString(0),
+                        UserID = sqlReader.GetGuid(0),
                         Name = sqlReader.GetString(1),
                         Email = sqlReader.GetString(2),
                     };
@@ -82,7 +111,7 @@ namespace BookExchange
 
         public static List<string> getBorrowByUser(String userID)
         {
-            String searchQuery = "SELECT Book FROM Borrowers WHERE UserID = " + userID;
+            String searchQuery = "SELECT BookISBN FROM Borrowers WHERE UserID = " + userID;
             List<String> books = new();
 
             using SqlConnection newConnection = new(SQLDetails);
@@ -109,7 +138,7 @@ namespace BookExchange
 
         public static List<string> getLoansByUser(String userID)
         {
-            String searchQuery = "SELECT Book FROM Loaners WHERE UserID = " + userID;
+            String searchQuery = "SELECT BookISBN FROM Loaners WHERE UserID = " + userID;
             List<String> books = new();
 
             using SqlConnection newConnection = new(SQLDetails);
