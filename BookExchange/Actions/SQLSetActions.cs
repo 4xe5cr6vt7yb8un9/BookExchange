@@ -1,11 +1,11 @@
 ﻿using System.Data.SqlClient;
 using System.Diagnostics;
 
-namespace BookExchange
+namespace BookExchange.Actions
 {
     public class SQLSetActions
     {
-        private const String SQLDetails = "Data Source=" +
+        private const string SQLDetails = "Data Source=" +
                                           "Provider=SQLOLEDB.1;" +
                                           "Integrated Security=SSPI;" +
                                           "Persist Security Info=False;" +
@@ -14,7 +14,7 @@ namespace BookExchange
 
         public static void addBook(Book newBook)
         {
-            String searchQuery = "INSERT INTO Books (ISBN, Title, Author, Descr, Published, Stock) " +
+            string searchQuery = "INSERT INTO Books (ISBN, Title, Author, Descr, Published, Stock) " +
                                  "VALUES ('" +
                                     newBook.ISBN + "','" +
                                     newBook.Title + "','" +
@@ -40,7 +40,7 @@ namespace BookExchange
 
         public static void addUser(ExchangeUser newUser)
         {
-            String searchQuery = "INSERT INTO Users (UserID, Name, Email) " +
+            string searchQuery = "INSERT INTO Users (UserID, Name, Email) " +
                                  "VALUES ('" +
                                     newUser.UserID + "','" +
                                     newUser.Name + "','" +
@@ -61,9 +61,9 @@ namespace BookExchange
             selectCommand.Connection.Close();
         }
 
-        public static void addBorrowedBook(String userID, String book)
+        public static void addBorrowedBook(string userID, string book)
         {
-            String searchQuery = "INSERT INTO Borrowers (UserID, BookISBN) " +
+            string searchQuery = "INSERT INTO Borrowers (UserID, BookISBN) " +
                                  "VALUES ('" +
                                     userID + "','" +
                                     book + "')";
@@ -83,9 +83,9 @@ namespace BookExchange
             selectCommand.Connection.Close();
         }
 
-        public static void addLoanedBook(String userID, String book)
+        public static void addLoanedBook(string userID, string book)
         {
-            String searchQuery = "INSERT INTO Loaners (UserID, BookISBN) " +
+            string searchQuery = "INSERT INTO Loaners (UserID, BookISBN) " +
                                  "VALUES ('" +
                                     userID + "','" +
                                     book + "')";

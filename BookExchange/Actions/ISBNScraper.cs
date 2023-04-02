@@ -8,14 +8,14 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 
-namespace BookExchange
+namespace BookExchange.Actions
 {
     public class ISBNScraper
     {
-        public static Book Scrap(String ISBN)
+        public static Book Scrap(string ISBN)
         {
             //Send the request to the server
-            ISBN = ISBN.Replace(" ", String.Empty).Replace("-", String.Empty);
+            ISBN = ISBN.Replace(" ", string.Empty).Replace("-", string.Empty);
 
             HtmlWeb web = new HtmlWeb();
 
@@ -33,9 +33,9 @@ namespace BookExchange
 
             foreach (var item in image)
             {
-                String imageUrl = item.GetAttributeValue("src");
+                string imageUrl = item.GetAttributeValue("src");
                 WebClient webClient = new WebClient();
-                webClient.DownloadFile(imageUrl, "C:\\Users\\aiden\\source\\repos\\BookExchange\\Data\\ICONS\\"+ISBN+".jpg");
+                webClient.DownloadFile(imageUrl, "C:\\Users\\aiden\\source\\repos\\BookExchange\\Data\\ICONS\\" + ISBN + ".jpg");
             }
 
             foreach (var item in header)
@@ -48,11 +48,11 @@ namespace BookExchange
                 switch (item.FirstChild.InnerText)
                 {
                     case "Author:":
-                        String author = item.LastChild.InnerText.Replace("\"", String.Empty).Trim();
+                        string author = item.LastChild.InnerText.Replace("\"", string.Empty).Trim();
                         newBook.Author = author;
                         break;
                     case "Published:":
-                        String published = item.LastChild.InnerText.Replace("\"", String.Empty).Trim();
+                        string published = item.LastChild.InnerText.Replace("\"", string.Empty).Trim();
                         newBook.Published = published;
                         break;
                 }

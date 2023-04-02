@@ -1,20 +1,20 @@
 ﻿using System.Data.SqlClient;
 using System.Diagnostics;
 
-namespace BookExchange
+namespace BookExchange.Actions
 {
     public static class SQLGetActions
     {
-        private const String SQLDetails = "Data Source=" +
+        private const string SQLDetails = "Data Source=" +
                                           "Provider=SQLOLEDB.1;" +
                                           "Integrated Security=SSPI;" +
                                           "Persist Security Info=False;" +
                                           "Initial Catalog=BookExchange;" +
                                           "Data Source=localhost\\SQLEXPRESS";
 
-        public static Book getBookByQuery(String query)
+        public static Book getBookByQuery(string query)
         {
-            String searchQuery = "SELECT * FROM Books WHERE " + query;
+            string searchQuery = "SELECT * FROM Books WHERE " + query;
             Book selectBook;
 
             using SqlConnection newConnection = new(SQLDetails);
@@ -48,9 +48,9 @@ namespace BookExchange
             return new Book();
         }
 
-        public static bool verifyISBN(String ISBN)
+        public static bool verifyISBN(string ISBN)
         {
-            String searchQuery = "SELECT * FROM Books WHERE ISBN = " + ISBN;
+            string searchQuery = "SELECT * FROM Books WHERE ISBN = " + ISBN;
 
             using SqlConnection newConnection = new(SQLDetails);
             SqlCommand selectCommand = new(searchQuery, newConnection);
@@ -76,9 +76,9 @@ namespace BookExchange
             return true;
         }
 
-        public static ExchangeUser getUserByQuery(String query)
+        public static ExchangeUser getUserByQuery(string query)
         {
-            String searchQuery = "SELECT * FROM Users WHERE " + query;
+            string searchQuery = "SELECT * FROM Users WHERE " + query;
             ExchangeUser selectUser;
 
             using SqlConnection newConnection = new(SQLDetails);
@@ -109,10 +109,10 @@ namespace BookExchange
             return new ExchangeUser();
         }
 
-        public static List<string> getBorrowByUser(String userID)
+        public static List<string> getBorrowByUser(string userID)
         {
-            String searchQuery = "SELECT BookISBN FROM Borrowers WHERE UserID = " + userID;
-            List<String> books = new();
+            string searchQuery = "SELECT BookISBN FROM Borrowers WHERE UserID = " + userID;
+            List<string> books = new();
 
             using SqlConnection newConnection = new(SQLDetails);
             SqlCommand selectCommand = new(searchQuery, newConnection);
@@ -136,10 +136,10 @@ namespace BookExchange
             return books;
         }
 
-        public static List<string> getLoansByUser(String userID)
+        public static List<string> getLoansByUser(string userID)
         {
-            String searchQuery = "SELECT BookISBN FROM Loaners WHERE UserID = " + userID;
-            List<String> books = new();
+            string searchQuery = "SELECT BookISBN FROM Loaners WHERE UserID = " + userID;
+            List<string> books = new();
 
             using SqlConnection newConnection = new(SQLDetails);
             SqlCommand selectCommand = new(searchQuery, newConnection);
