@@ -2,7 +2,7 @@
 {
     public class ExchangeUser
     {
-        public String UserID { get; set; }
+        public Guid UserID { get; set; }
 
         public String Name { get; set; }
 
