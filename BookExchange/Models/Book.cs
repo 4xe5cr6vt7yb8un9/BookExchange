@@ -1,4 +1,4 @@
-namespace BookExchange
+namespace BookExchange.Models
 {
     public class Book
     {
