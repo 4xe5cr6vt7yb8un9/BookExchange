@@ -1,5 +1,5 @@
 using BookExchange.Actions;
-using BookExchange.Controllers;
+using BookExchange.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -9,15 +9,6 @@ namespace BookExchange.Controllers
     [Route("[controller]")]
     public class BookController : ControllerBase
     {
-
-        /*
-        private readonly ILogger<BookController> _logger;
-
-        public BookController(ILogger<BookController> logger)
-        {
-            _logger = logger;
-        }*/
-
         [HttpGet("ISBN/{ISBN}")]
         public Book GetISBNBook(String ISBN)
         {
@@ -78,6 +69,18 @@ namespace BookExchange.Controllers
         {
             ExchangeUser User = SQLGetActions.getUserByQuery("Email = '" + Email + "'");
             return User;
+        }
+
+        [HttpPost]
+        public ExchangeUser AddNewUser(ExchangeUser userInfo)
+        {
+            ExchangeUser newUser = new()
+            {
+                Name = userInfo.Name,
+                Email = userInfo.Email
+            };
+            SQLSetActions.addUser(newUser);
+            return newUser;
         }
     }
 }
