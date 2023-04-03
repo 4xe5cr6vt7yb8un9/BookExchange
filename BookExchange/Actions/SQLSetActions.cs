@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Diagnostics;
+using BookExchange.Models;
 
 namespace BookExchange.Actions
 {
@@ -41,8 +42,7 @@ namespace BookExchange.Actions
         public static void addUser(ExchangeUser newUser)
         {
             string searchQuery = "INSERT INTO Users (UserID, Name, Email) " +
-                                 "VALUES ('" +
-                                    newUser.UserID + "','" +
+                                 "VALUES (NEWID(), '" +
                                     newUser.Name + "','" +
                                     newUser.Email + "')";
 

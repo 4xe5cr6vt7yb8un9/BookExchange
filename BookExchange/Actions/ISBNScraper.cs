@@ -1,12 +1,7 @@
-﻿using CsvHelper;
-using HtmlAgilityPack;
-using System.Globalization;
+﻿using HtmlAgilityPack;
 using ScrapySharp.Extensions;
-using System.IO;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Net;
+using BookExchange.Models;
 
 namespace BookExchange.Actions
 {
