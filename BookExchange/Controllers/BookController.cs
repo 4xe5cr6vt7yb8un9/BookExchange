@@ -45,7 +45,7 @@ namespace BookExchange.Controllers
             Book newBook;
             if (!SQLGetActions.verifyISBN(ISBN))
             {
-                newBook = ISBNScraper.Scrap(ISBN);
+                newBook = ISBNScraper.ISBNGrab(ISBN);
                 SQLSetActions.addBook(newBook);
             }
 
