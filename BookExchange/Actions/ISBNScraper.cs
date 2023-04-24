@@ -8,44 +8,75 @@ using Newtonsoft.Json.Linq;
 using Google.Apis.Books.v1;
 using Google.Apis.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting.Internal;
+using System;
+using Google.Apis.Books.v1.Data;
+using System.Linq;
+using System.Text;
 
 namespace BookExchange.Actions
 {
-    public class ISBNScraper
+    public static class ISBNScraper
     {
-        public static void DownloadImage(String URL, String ISBN)
+        public async static Task DownloadImage(String URL, String ISBN)
         {
-            WebClient webClient = new WebClient();
-            webClient.DownloadFile(URL, "C:\\Users\\aiden\\source\\repos\\BookExchange\\Data\\ICONS\\" + ISBN + ".jpg");
+            Uri uri = new(URL);
+            HttpClient client = new();
+            var response = await client.GetAsync(uri);
+            try
+            {
+                using var fs = new FileStream(
+                                string.Format("wwwroot/data/thumbnails/{0}.jpg", ISBN),
+                                FileMode.CreateNew);
+                await response.Content.CopyToAsync(fs);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Unable to Save File");
+            }
         }
-        
-        public static Book ISBNGrab(String ISBN)
+
+        public static async Task<Book?> ISBNGrabAsync(String ISBN)
         {
             BookApi GBooks = new("AIzaSyCl83uxcTL1Zg4p_mxUajhJhEHsjgUy94k");
             List<ISBNData> results = GBooks.Search("ISBN:" + ISBN);
-            ISBNData correctBook = new();
+            ISBNData? correctBook = null;
 
             Book newBook = new();
-            newBook.ISBN = ISBN;
 
-            foreach (var book in results)
+            IEnumerable<ISBNData> bookQuery = 
+                from book in results 
+                from identity in book.IndustryIdentifiers
+                where identity.Identifier.Equals(ISBN)
+                select book; 
+
+            foreach (var book in bookQuery)
             {
-                foreach (var identity in book.IndustryIdentifiers)
-                {
-                    if (identity.Identifier.Equals(ISBN))
-                        correctBook = book;
-                }                
+                correctBook = book;
             }
 
-            newBook.Author = correctBook.Authors.ToArray()[0];
-            newBook.Title = correctBook.Title;
-            newBook.Published = correctBook.Published_date;
-            newBook.Description = correctBook.Description;
+            if (correctBook != null)
+            {
+                StringBuilder authors = new("");
 
-            Console.WriteLine(correctBook.ImageLinks.Thumbnail);
-            DownloadImage(correctBook.ImageLinks.Thumbnail, ISBN);
+                foreach (var author in correctBook.Authors.ToArray())
+                {
+                    authors.Append(author + ", ");
+                }
 
-            return newBook;
+                newBook.ISBN = ISBN;
+                newBook.Author = authors.ToString();
+                newBook.Title = correctBook.Title;
+                newBook.Published = correctBook.Published_date;
+                newBook.Description = correctBook.Description;
+
+                if (correctBook.ImageLinks != null)
+                    await DownloadImage(correctBook.ImageLinks.Thumbnail, ISBN);
+
+                return newBook;
+            }
+
+            return null;
         }
     }
 
