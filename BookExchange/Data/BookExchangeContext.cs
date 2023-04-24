@@ -17,5 +17,9 @@ namespace BookExchange.Data
         public DbSet<BookExchange.Models.Book> Book { get; set; } = default!;
 
         public DbSet<BookExchange.Models.ExchangeUser>? ExchangeUser { get; set; }
+
+        public DbSet<BookExchange.Models.Loans>? Loans { get; set; }
+
+        public DbSet<BookExchange.Models.Borrowed>? Borrowed { get; set; }
     }
 }
