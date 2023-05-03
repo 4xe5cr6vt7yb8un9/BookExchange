@@ -24,7 +24,7 @@ namespace BookExchange.Controllers
         }
 
         // GET: Books/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null || _context.Book == null)
             {
@@ -32,7 +32,7 @@ namespace BookExchange.Controllers
             }
 
             var book = await _context.Book
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.BookID == id);
             if (book == null)
             {
                 return NotFound();
@@ -49,13 +49,14 @@ namespace BookExchange.Controllers
 
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkBookID=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author,Description,Published,ISBN,Available")] Book book)
+        public async Task<IActionResult> Create([Bind("BookID,Title,Author,Description,Published,ISBN,Available")] Book book)
         {
             if (ModelState.IsValid)
             {
+                book.BookID = Guid.NewGuid();
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -71,7 +72,7 @@ namespace BookExchange.Controllers
 
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkBookID=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateISBN(String ISBN)
@@ -80,6 +81,7 @@ namespace BookExchange.Controllers
 
             if (ModelState.IsValid && book != null)
             {
+                book.BookID = Guid.NewGuid();
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -88,7 +90,7 @@ namespace BookExchange.Controllers
         }
 
         // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null || _context.Book == null)
             {
@@ -105,12 +107,12 @@ namespace BookExchange.Controllers
 
         // POST: Books/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkBookID=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Description,Published,ISBN,Available")] Book book)
+        public async Task<IActionResult> Edit(Guid id, [Bind("BookID,Title,Author,Description,Published,ISBN,Available")] Book book)
         {
-            if (id != book.Id)
+            if (id != book.BookID)
             {
                 return NotFound();
             }
@@ -124,7 +126,7 @@ namespace BookExchange.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.Id))
+                    if (!BookExists(book.BookID))
                     {
                         return NotFound();
                     }
@@ -139,7 +141,7 @@ namespace BookExchange.Controllers
         }
 
         // GET: Books/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.Book == null)
             {
@@ -147,7 +149,7 @@ namespace BookExchange.Controllers
             }
 
             var book = await _context.Book
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.BookID == id);
             if (book == null)
             {
                 return NotFound();
@@ -159,7 +161,7 @@ namespace BookExchange.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             if (_context.Book == null)
             {
@@ -175,9 +177,9 @@ namespace BookExchange.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BookExists(int id)
+        private bool BookExists(Guid id)
         {
-            return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Book?.Any(e => e.BookID == id)).GetValueOrDefault();
         }
     }
 }
