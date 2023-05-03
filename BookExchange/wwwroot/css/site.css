@@ -1,3 +1,10 @@
+#desc {
+    display: block;
+    height: 250px;
+    overflow: auto;
+
+}
+
 html {
   font-size: 14px;
 }
