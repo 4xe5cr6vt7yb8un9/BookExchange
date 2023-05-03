@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookExchange.Data;
 using BookExchange.Models;
+using BookExchange.Controllers;
 
 namespace BookExchange.Controllers
 {
@@ -27,24 +28,6 @@ namespace BookExchange.Controllers
                           Problem("Entity set 'BookExchangeContext.Loans'  is null.");
         }
 
-        // GET: Loans/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null || _context.Loans == null)
-            {
-                return NotFound();
-            }
-
-            var loans = await _context.Loans
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (loans == null)
-            {
-                return NotFound();
-            }
-
-            return View(loans);
-        }
-
         // GET: Loans/Create
         public IActionResult Create()
         {
@@ -56,11 +39,12 @@ namespace BookExchange.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ISBN")] Loans loans)
+        public async Task<IActionResult> Create([Bind("Id,LoanerName,LoanerEmail,ISBN,LoanDate")] Loans loans)
         {
             if (ModelState.IsValid)
             {
                 loans.Id = Guid.NewGuid();
+                loans.LoanDate = DateTime.Now;
                 _context.Add(loans);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -68,9 +52,16 @@ namespace BookExchange.Controllers
             return View(loans);
         }
 
-        // GET: Loans/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public IActionResult Rent()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RentCon(Guid? id, [Bind("Id,RenterName,RenterEmail")] Rents rent)
+        {
+            Console.WriteLine(id);
             if (id == null || _context.Loans == null)
             {
                 return NotFound();
@@ -81,42 +72,18 @@ namespace BookExchange.Controllers
             {
                 return NotFound();
             }
-            return View(loans);
-        }
 
-        // POST: Loans/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ISBN")] Loans loans)
-        {
-            if (id != loans.Id)
+            Rents rents = (new Rents
             {
-                return NotFound();
-            }
+                Id = Guid.NewGuid(),
+                RenterName = rent.RenterName,
+                RenterEmail = rent.RenterEmail,
+                RentedFrom = loans.LoanerName,
+                RentDate = DateTime.Now,
+                ISBN = loans.ISBN
+            });
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(loans);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LoansExists(loans.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(loans);
+            return RedirectToAction("Create", "Rents", rents);
         }
 
         // GET: Loans/Delete/5
