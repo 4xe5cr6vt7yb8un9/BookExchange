@@ -4,6 +4,7 @@ using BookExchange.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookExchange.Migrations
 {
     [DbContext(typeof(BookExchangeContext))]
-    partial class BookExchangeContextModelSnapshot : ModelSnapshot
+    [Migration("20230425164417_Renting")]
+    partial class Renting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,9 +26,11 @@ namespace BookExchange.Migrations
 
             modelBuilder.Entity("BookExchange.Models.Book", b =>
                 {
-                    b.Property<Guid>("BookID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -49,16 +53,18 @@ namespace BookExchange.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BookID");
+                    b.HasKey("Id");
 
-                    b.ToTable("Book", (string)null);
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("BookExchange.Models.ClassUsed", b =>
                 {
-                    b.Property<Guid>("ClassUsedID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ISBN")
                         .IsRequired()
@@ -68,9 +74,9 @@ namespace BookExchange.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ClassUsedID");
+                    b.HasKey("Id");
 
-                    b.ToTable("ClassUsed", (string)null);
+                    b.ToTable("ClassUsed");
                 });
 
             modelBuilder.Entity("BookExchange.Models.Loans", b =>
@@ -96,7 +102,7 @@ namespace BookExchange.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Loans", (string)null);
+                    b.ToTable("Loans");
                 });
 
             modelBuilder.Entity("BookExchange.Models.Rents", b =>
@@ -112,10 +118,6 @@ namespace BookExchange.Migrations
                     b.Property<DateTime>("RentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RentedFrom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RenterEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -126,7 +128,7 @@ namespace BookExchange.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rents", (string)null);
+                    b.ToTable("Rents");
                 });
 #pragma warning restore 612, 618
         }

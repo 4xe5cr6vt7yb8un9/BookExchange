@@ -4,6 +4,7 @@ using BookExchange.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookExchange.Migrations
 {
     [DbContext(typeof(BookExchangeContext))]
-    partial class BookExchangeContextModelSnapshot : ModelSnapshot
+    [Migration("20230427143322_GUIDchange")]
+    partial class GUIDchange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +53,7 @@ namespace BookExchange.Migrations
 
                     b.HasKey("BookID");
 
-                    b.ToTable("Book", (string)null);
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("BookExchange.Models.ClassUsed", b =>
@@ -70,7 +72,7 @@ namespace BookExchange.Migrations
 
                     b.HasKey("ClassUsedID");
 
-                    b.ToTable("ClassUsed", (string)null);
+                    b.ToTable("ClassUsed");
                 });
 
             modelBuilder.Entity("BookExchange.Models.Loans", b =>
@@ -96,7 +98,7 @@ namespace BookExchange.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Loans", (string)null);
+                    b.ToTable("Loans");
                 });
 
             modelBuilder.Entity("BookExchange.Models.Rents", b =>
@@ -126,7 +128,7 @@ namespace BookExchange.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rents", (string)null);
+                    b.ToTable("Rents");
                 });
 #pragma warning restore 612, 618
         }
