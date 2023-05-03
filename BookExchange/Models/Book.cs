@@ -7,7 +7,8 @@ namespace BookExchange.Models
 {
     public class Book
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
+        public Guid BookID { get; set; }
 
         [Required(ErrorMessage = "Book Title is Required")]
         [Display(Name = "Book Title")]
@@ -26,7 +27,14 @@ namespace BookExchange.Models
         public String ISBN { get; set; }
 
         public int Available { get; set; }
+    }
 
+    public class ClassUsed
+    {
+        //public int Id { get; set; }
+        public Guid ClassUsedID { get; set; }
+        public String className { get; set; }
+        public String ISBN { get; set; }
     }
 
     public class ISBNData
