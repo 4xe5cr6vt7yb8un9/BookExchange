@@ -22,6 +22,7 @@ namespace BookExchange.Models
         [Display(Name = "Loaner Email")]
         public String LoanerEmail { get; set; }
 
+        [Display(Name = "Book ISBN")]
         public String ISBN { get; set; }
 
         [Display(Name = "Loaned Date")]
@@ -44,5 +45,15 @@ namespace BookExchange.Models
 
         [Display(Name = "Rented Date")]
         public DateTime RentDate { get; set; }
+
+        public void Print()
+        {
+            Console.WriteLine("ID: " + Id);
+            Console.WriteLine("RName: " + RenterName);
+            Console.WriteLine("REmail: " + RenterEmail);
+            Console.WriteLine("RFrom: " + RentedFrom);
+            Console.WriteLine("ISBN: " + ISBN);
+            Console.WriteLine("RDate: " + RentDate);
+        }
     }
 }
