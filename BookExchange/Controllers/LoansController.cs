@@ -52,16 +52,25 @@ namespace BookExchange.Controllers
             return View(loans);
         }
 
-        public IActionResult Rent()
+        public async Task<IActionResult> Rent(Guid? id)
         {
+            if (id == null || _context.Loans == null)
+            {
+                return NotFound();
+            }
+
+            var loans = await _context.Loans.FindAsync(id);
+            if (loans == null)
+            {
+                return NotFound();
+            }
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Rent")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RentCon(Guid? id, [Bind("Id,RenterName,RenterEmail")] Rents rent)
+        public async Task<IActionResult> RentCon(Guid? id)
         {
-            Console.WriteLine(id);
             if (id == null || _context.Loans == null)
             {
                 return NotFound();
@@ -75,15 +84,12 @@ namespace BookExchange.Controllers
 
             Rents rents = (new Rents
             {
-                Id = Guid.NewGuid(),
-                RenterName = rent.RenterName,
-                RenterEmail = rent.RenterEmail,
                 RentedFrom = loans.LoanerName,
-                RentDate = DateTime.Now,
                 ISBN = loans.ISBN
             });
+            rents.Print();
 
-            return RedirectToAction("Create", "Rents", rents);
+            return RedirectToAction("RentBook", "Rents", rents);
         }
 
         // GET: Loans/Delete/5

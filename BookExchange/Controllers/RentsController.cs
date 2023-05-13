@@ -46,12 +46,6 @@ namespace BookExchange.Controllers
         }
 
         // GET: Rents/Create
-        public IActionResult RentBook()
-        {
-            return View();
-        }
-
-        // GET: Rents/Create
         public IActionResult Create()
         {
             return View();
@@ -72,6 +66,27 @@ namespace BookExchange.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(rents);
+        }
+
+        public IActionResult RentBook(Rents rents)
+        {
+            return View(rents);
+        }
+
+        [HttpPost, ActionName("RentBook")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RentBookCon(Rents rents)
+        {
+            rents.Print();
+            if (ModelState.IsValid)
+            {
+                rents.Id = Guid.NewGuid();
+                rents.RentDate = DateTime.Now;
+                _context.Add(rents);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Rents/Edit/5

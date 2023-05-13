@@ -89,6 +89,39 @@ namespace BookExchange.Controllers
             return View(book);
         }
 
+        public async Task<IActionResult> Loan(Guid? id)
+        {
+            if (id == null || _context.Book == null)
+            {
+                return NotFound();
+            }
+
+            var Book = await _context.Book.FindAsync(id);
+            if (Book == null)
+            {
+                return NotFound();
+            }
+            return View();
+        }
+
+        [HttpPost, ActionName("Loan")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoanCon(Guid? id)
+        {
+            if (id == null || _context.Book == null)
+            {
+                return NotFound();
+            }
+
+            var loans = await _context.Book.FindAsync(id);
+            if (loans == null)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("LoanBook", "Loans", loans.ISBN);
+        }
+
         // GET: Books/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
