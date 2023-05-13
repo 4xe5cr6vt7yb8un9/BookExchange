@@ -12,18 +12,9 @@
         <form asp-action="Rent">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+         
             <div class="form-group">
-                <label asp-for="RenterName" class="control-label"></label>
-                <input asp-for="RenterName" class="form-control" />
-                <span asp-validation-for="RenterName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RenterEmail" class="control-label"></label>
-                <input asp-for="RenterEmail" class="form-control" />
-                <span asp-validation-for="RenterEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Confirm" class="btn btn-primary" />
             </div>
         </form>
     </div>

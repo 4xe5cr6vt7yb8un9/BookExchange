@@ -1,0 +1,75 @@
+﻿.containerI {
+    border-radius: 15px;
+    background-color: #F1F1F1;
+    height: 800px;
+    width: 800px;
+    overflow: auto;
+    margin: auto;
+    position: relative;
+    top: 30px;
+}
+
+.card {
+    background-color: rgb(211, 209, 209);
+    height: 200px;
+    width: 700px;
+    border-radius: 10px;
+    position: relative;
+    top: 10%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    transition-duration: 0.4s;
+}
+
+    .card:hover {
+        box-shadow: 0 10px 10px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+.image {
+    position: relative;
+    top: 100px;
+    left: 25px;
+}
+
+#bookTitle {
+    position: absolute;
+    top: 25px;
+    left: 200px;
+}
+
+#author {
+    position: absolute;
+    top: 60px;
+    left: 200px;
+}
+
+#ISBN {
+    position: absolute;
+    top: 100px;
+    left: 200px;
+}
+
+.button {
+    background-color: white;
+    position: absolute;
+    top: 100px;
+    left: 500px;
+    height: 60px;
+    width: 120px;
+    border-radius: 10px;
+    transition-duration: 0.2s;
+}
+
+    .button:hover {
+        background-color: #005493;
+        color: white;
+    }
+
+#searchBar {
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    height: 3%;
+    width: 50%;
+}

@@ -2,14 +2,55 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <!--<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>-->
+<!--Poppins Font-->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@500&display=swap" rel="stylesheet">
 
-    <ul>
-        @for (int i = 0; i < 6; i++)
-        {
-            <li>@ViewData["Message"]</li>
-        }
-    </ul>
+<div class="mainBody">
+
+    <div>
+        <h1 id="Welcome">
+            WELCOME!
+        </h1>
+
+        <div id="bodyBackground"></div>
+
+        <h2 id="header1">
+            Berwick Book Exchange
+        </h2>
+
+        <hr>
+
+        <p id="description">
+            The Berwick Book Exchange, or BBE for short, 
+            is a resource for students to exhange and loan out old books 
+            to students looking for them. Our hope is that through this program
+            students and parents can save money on books for the upcoming school year.
+        </p>
+
+    </div>
+
+    <div>
+        <h2 id="header2">
+            Loan Your First Book 
+        </h2>
+
+        <hr>
+
+        <a class="button" id="Click2Start" asp-area="" asp-controller="Loans" asp-action="Index">
+            Click Here to Get Started!
+        </a>
+    </div>
+
+    <div>
+        <h2 id="header3">
+            See a List of Previously Used Books
+        </h2>
+
+        <hr>
+
+        <a class="button" id="Click4List" asp-area="" asp-controller="Books" asp-action="Index">
+            Click Here for the List
+        </a>
+    </div>
+
 </div>

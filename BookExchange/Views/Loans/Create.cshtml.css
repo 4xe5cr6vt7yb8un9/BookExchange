@@ -1,0 +1,76 @@
+﻿#desc {
+    display: block;
+    height: 250px;
+    overflow: auto;
+}
+
+#page {
+    height: 866px;
+}
+
+#c1 {
+    position: absolute;
+    top: 15%;
+    height: 60%;
+    width: max-content;
+}
+
+.w3-btn {
+    color: #fff !important;
+    background-color: #0D6EFF !important;
+    border-color: #0d6efd !important;
+}
+
+#c2 {
+    height: 125px;
+    width: 800px;
+}
+
+#input {
+    height: auto;
+    width: 365px;
+}
+
+.col-md-4 {
+    position: relative;
+    left: 25%;
+    width: 45% !important;
+}
+
+.LoanSubmit {
+    position: relative;
+    left: 40%;
+}
+
+.w3-input {
+    border-bottom: 0px !important;
+}
+
+#submitBtn {
+    position: absolute;
+    top: 400px;
+    right: 350px;
+    height: 60px;
+    width: 100px;
+    background-color: #005493;
+    color: white;
+}
+
+#text {
+    position: absolute;
+    top: 40px;
+    border-bottom: 1px solid #ccc;
+}
+
+html {
+    font-size: 14px;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}

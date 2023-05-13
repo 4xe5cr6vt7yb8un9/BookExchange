@@ -22,6 +22,16 @@
                 <span asp-validation-for="RenterEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="RentedFrom" class="control-label"></label>
+                <input asp-for="RentedFrom" class="form-control" />
+                <span asp-validation-for="RentedFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ISBN" class="control-label"></label>
+                <input asp-for="ISBN" class="form-control" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

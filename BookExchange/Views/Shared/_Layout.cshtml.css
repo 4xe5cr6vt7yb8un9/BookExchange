@@ -1,6 +1,83 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header {
+    overflow: hidden;
+    background-color: #005493;
+    padding: 20px 10px;
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+    /* Style the header links */
+    .header a {
+        float: left;
+        color: #ddd;
+        text-align: center;
+        padding: 12px;
+        text-decoration: none;
+        font-size: 18px;
+        line-height: 25px;
+        border-radius: 4px;
+    }
+        /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
+        .header a.logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+        /* Change the background color on mouse-over */
+        .header a:hover {
+            background-color: #ddd;
+            color: black !important;
+            opacity: 40%;
+        }
+        /* Style the active/current link*/
+        .header a.active {
+            background-color: #ddd;
+            color: black;
+        }
+/* Float the link section to the right */
+.header-right {
+    float: right;
+}
+/* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
+
+
+.nav-link {
+    color: white !important;
+}
+
+.navB {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+#watchtower {
+    height: 45px;
+    position: relative;
+}
+
+#BBE {
+    margin-left: 16px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;

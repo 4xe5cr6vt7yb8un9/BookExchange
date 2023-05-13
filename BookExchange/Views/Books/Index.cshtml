@@ -4,78 +4,45 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<head>
+    <title>BookSearch</title>
+</head>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<body>
+    <div class="page">
+        <div class="container">
+            <input type="text" id="searchBar" placeholder="Search...">
 
-<p>
-    <a asp-action="CreateISBN">Create New with ISBN</a>
-</p>
+            <table class="table">
+               
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="card hover">
+                            <td>
+                                @{
+                                    var ISBN = item.ISBN;
+                                    var imageSource = @"\data\thumbnails\" + ISBN + ".jpg";
+                                }
+                                <img src=@imageSource width="128" height="200">
+                            </td>
+                            <td id="bookTitle">
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td id="author">
+                                @Html.DisplayFor(modelItem => item.Author)
+                            </td>
+                            <td id="ISBN">
+                                @Html.DisplayFor(modelItem => item.ISBN)
+                            </td>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <p> Thumbnail </p>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Published)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ISBN)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Available)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @{
-                        var ISBN = item.ISBN;
-                        var imageSource = @"\data\thumbnails\" + ISBN + ".jpg";
+                            <td>
+                                <a class="button" asp-action="Details" asp-route-id="@item.BookID">Details</a> |
+                            </td>
+                        </tr>
                     }
-                    <img src=@imageSource width="128" height="200">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Author)
-                </td>
-                <td id="desc">
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Published)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ISBN)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Available)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.BookID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.BookID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.BookID">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>

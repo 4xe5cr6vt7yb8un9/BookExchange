@@ -4,40 +4,51 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<html>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<head>
+    <title>BookExchange</title>
+</head>
 
-<h4>Loans</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="LoanerName" class="control-label"></label>
-                <input asp-for="LoanerName" class="form-control" />
-                <span asp-validation-for="LoanerName" class="text-danger"></span>
+<body>
+    <div id="page">
+        <div id="c1" class="w3-card w3-light-gray w3-round">
+            <div id="c2" class="w3-container w3-light-gray w3-">
+                <h2 id="text">Enter the information on the book you'd like to check in</h2>
             </div>
-            <div class="form-group">
-                <label asp-for="LoanerEmail" class="control-label"></label>
-                <input asp-for="LoanerEmail" class="form-control" />
-                <span asp-validation-for="LoanerEmail" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group w3-input w3-margin">
+                            <label asp-for="LoanerName" class="control-label"></label>
+                            <input asp-for="LoanerName" class="form-control" />
+                            <span asp-validation-for="LoanerName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group w3-input w3-margin">
+                            <label asp-for="LoanerEmail" class="control-label"></label>
+                            <input asp-for="LoanerEmail" class="form-control" />
+                            <span asp-validation-for="LoanerEmail" class="text-danger"></span>
+                        </div>
+                        <div class="form-group w3-input w3-margin">
+                            <label asp-for="ISBN" class="control-label"></label>
+                            <input asp-for="ISBN" class="form-control" />
+                            <span asp-validation-for="ISBN" class="text-danger"></span>
+                        </div>
+                        <div class="form-group LoanSubmit">
+                            <input type="submit" value="Submit" class="w3-btn w3-round btn" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ISBN" class="control-label"></label>
-                <input asp-for="ISBN" class="form-control" />
-                <span asp-validation-for="ISBN" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</body>
+</html>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
