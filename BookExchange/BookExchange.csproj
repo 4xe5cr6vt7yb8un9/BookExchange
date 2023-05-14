@@ -26,4 +26,11 @@
     <Folder Include="wwwroot\data\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\BookIndex.css" />
+    <None Include="wwwroot\css\LoanCreate.css" />
+    <None Include="wwwroot\css\HomeIndex.css" />
+    <None Include="wwwroot\css\Header.css" />
+  </ItemGroup>
+
 </Project>
