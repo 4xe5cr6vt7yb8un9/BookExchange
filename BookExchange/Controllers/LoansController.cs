@@ -23,14 +23,14 @@ namespace BookExchange.Controllers
         // GET: Loans
         public async Task<IActionResult> Index()
         {
-              return _context.Loans != null ? 
-                          View(await _context.Loans.ToListAsync()) :
-                          Problem("Entity set 'BookExchangeContext.Loans'  is null.");
+            return _context.Loans != null ?
+                        View(await _context.Loans.ToListAsync()) :
+                        Problem("Entity set 'BookExchangeContext.Loans'  is null.");
         }
 
         // GET: Loans/Create
-        public IActionResult Create()
-        {
+        public IActionResult Create(String isbn)
+        {            
             return View();
         }
 
@@ -124,14 +124,14 @@ namespace BookExchange.Controllers
             {
                 _context.Loans.Remove(loans);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool LoansExists(Guid id)
         {
-          return (_context.Loans?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Loans?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
