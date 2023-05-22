@@ -3,6 +3,7 @@ using BookExchange.Data;
 using BookExchange.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace BookExchange.Controllers
 {
@@ -16,29 +17,52 @@ namespace BookExchange.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Page(string query, string sortOrder, int startIndex, int pageSize)
         {
-            return _context.Book != null ?
-                        View(await _context.Book.ToListAsync()) :
-                        Problem("Entity set 'BookExchangeContext.Book'  is null.");
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var books = from book in _context.Book
+                        select book;
+            books = sortOrder switch
+            {
+                "name_desc" => books.OrderByDescending(book => book.Title),
+                "Date" => books.OrderBy(book => book.Published),
+                "date_desc" => books.OrderByDescending(book => book.Published),
+                _ => books.OrderBy(book => book.Title),
+            };
+
+            var page = books.Skip((startIndex-1) * pageSize).Take(pageSize);
+            return View(await page.AsNoTracking().ToListAsync());
         }
 
         // GET: Books/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid? id, String? isbn)
         {
-            if (id == null || _context.Book == null)
+            if (id == null && isbn == null || _context.Book == null)
             {
                 return NotFound();
             }
-
-            var book = await _context.Book
-                .FirstOrDefaultAsync(m => m.BookID == id);
-            if (book == null)
+            if (id != null)
             {
-                return NotFound();
+                var book = await _context.Book
+                    .FirstOrDefaultAsync(m => m.BookID == id);
+                if (book == null)
+                {
+                    return NotFound();
+                }
+                return View(book);
             }
-
-            return View(book);
+            if (isbn != null)
+            {
+                var book = await _context.Book
+                    .FirstOrDefaultAsync(m => m.ISBN == isbn);
+                if (book == null)
+                {
+                    return NotFound();
+                }
+                return View(book);
+            }
+            return NotFound();
         }
 
         // GET: Books/Create
