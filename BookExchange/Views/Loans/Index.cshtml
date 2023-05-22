@@ -4,7 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<head>
+    <title>BookSearch</title>
+
+    <link rel="stylesheet" href="~/css/LoanIndex.css" asp-append-version="true" />
+</head>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -37,7 +41,7 @@
                     @Html.DisplayFor(modelItem => item.LoanerEmail)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.ISBN)
+                    <a href="/Books/Details?ISBN=@Html.DisplayFor(modelItem => item.ISBN)">@Html.DisplayFor(modelItem => item.ISBN)</a>
             </td>
             <td>
                     @Html.DisplayFor(modelItem => item.LoanDate)
