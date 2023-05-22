@@ -49,10 +49,22 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-//app.MapControllers();
+
+app.MapControllerRoute(
+    name: "Books",
+    pattern: "Books/{startIndex}",
+    defaults: new
+    {
+        controller = "Books",
+        action = "Page",
+        startIndex = 1,
+        pageSize = 6
+    }
+    );
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();
