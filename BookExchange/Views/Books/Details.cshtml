@@ -4,51 +4,65 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<head>
+    <title>@Html.DisplayFor(model => model.Title)</title>
 
-<div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Published)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Published)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ISBN)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ISBN)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Available)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Available)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.BookID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <link rel="stylesheet" href="~/css/BookDetails.css" asp-append-version="true" />
+</head>
+
+<body>
+    <h1 class="details">Details</h1>
+
+    <div class="main">
+        <div class="bookInfo">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Author)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Author)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Published)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Published)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ISBN)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ISBN)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Available)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Available)
+                </dd>
+            </dl>
+        </div>
+
+        <div class="ActionContainer">
+            <a class="button" asp-action="Edit" asp-route-id="@Model?.BookID">Edit Book</a>
+            <a class="button" asp-controller="Loans" asp-action="Create" asp-route-ISBN="@Model?.ISBN">Donate Book</a>
+            <a class="button" asp-area="" asp-controller="Loans" asp-action="Index">Get Book</a>
+        </div>
+    </div>
+
+    <div id="returnButton">
+        <a class="button" asp-action="Index">Back to List</a>
+    </div>
+</body>
