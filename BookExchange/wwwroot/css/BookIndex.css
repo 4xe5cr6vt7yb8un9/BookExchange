@@ -1,18 +1,19 @@
-﻿.containerI {
+﻿.main {
     border-radius: 15px;
     background-color: #F1F1F1;
-    height: 800px;
-    width: 800px;
+    width: 100%;
     overflow: auto;
-    margin: auto;
     position: relative;
-    top: 30px;
+    padding-bottom: 8px;
+}
+
+.container {
+    max-width: max-content !important;
 }
 
 .card {
     background-color: rgb(211, 209, 209);
-    height: 200px;
-    width: 700px;
+    width: 80%;
     border-radius: 10px;
     position: relative;
     top: 10%;
@@ -20,10 +21,20 @@
     margin-top: 20px;
     margin-bottom: 10px;
     transition-duration: 0.4s;
+    flex-direction: row;
+    align-items: center;
 }
 
     .card:hover {
         box-shadow: 0 10px 10px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+    .card img {
+        width: 6.36rem;
+        aspect-ratio: auto 128 / 200;
+        height: 10.5rem;
+        border-radius: 5px;
+        padding: 10px;
     }
 
 .image {
@@ -32,44 +43,122 @@
     left: 25px;
 }
 
-#bookTitle {
-    position: absolute;
-    top: 25px;
-    left: 200px;
-}
-
-#author {
-    position: absolute;
-    top: 60px;
-    left: 200px;
-}
-
-#ISBN {
-    position: absolute;
-    top: 100px;
-    left: 200px;
+.bookInfo {
+    width: 100%;
 }
 
 .button {
-    background-color: white;
-    position: absolute;
-    top: 100px;
-    left: 500px;
-    height: 60px;
-    width: 120px;
-    border-radius: 10px;
     transition-duration: 0.2s;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 32px;
+    border: none;
+    border-radius: 15px;
+    background-color: #005493;
+    display: inline-block;
+    margin: 15px;
 }
 
     .button:hover {
-        background-color: #005493;
+        background-color: #00aeff; /* Green */
         color: white;
     }
 
-#searchBar {
-    position: absolute;
-    top: 5%;
-    left: 10%;
-    height: 3%;
-    width: 50%;
+.SearchButton {
+    border-radius: 15px;
+    transition-duration: 0.2s;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    background-color: #005493;
+    display: inline-block;
+    margin-left: 15px;
 }
+
+    .SearchButton:hover {
+        background-color: #00aeff; /* Green */
+        color: white;
+    }
+
+.searchContainer {
+    display: flex;
+    width: 80%;
+    border-radius: 10px;
+    position: relative;
+    top: 10%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    transition-duration: 0.4s;
+    justify-content: center;
+}
+
+    .searchContainer form {
+        width: 100%;
+    }
+
+.form-actions {
+    display: flex;
+}
+
+#searchBar {
+    padding: 5px;
+    padding-left: 8px;
+    height: 5%;
+    width: 100%;
+    border-radius: 7px;
+    border: solid;
+    border-width: 1px;
+    border-color: slategray;
+    transition-duration: 0.4s;
+    margin: auto;
+    outline: none;
+}
+
+.pagination {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+        background-color: azure;
+        transition: background-color .3s;
+    }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: darkcyan;
+        }
+
+        .pagination a:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .pagination a:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }

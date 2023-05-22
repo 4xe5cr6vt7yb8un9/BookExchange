@@ -7,7 +7,17 @@ for details on configuring this project to bundle and minify static web assets. 
     box-sizing: border-box;
 }
 
+a {
+    user-select: none;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+}
+
 .header {
+    user-select: none;
     overflow: hidden;
     background-color: #005493;
     padding: 20px 10px;
@@ -63,6 +73,11 @@ for details on configuring this project to bundle and minify static web assets. 
     justify-content: space-around;
     flex-direction: row;
 }
+
+    .navB:hover {
+        background-color: transparent !important;
+        opacity: 100% !important;
+    }
 
 #watchtower {
     height: 45px;
@@ -122,4 +137,18 @@ button.accept-policy {
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+  background-color: aliceblue;
+  height: 4rem;
+}
+
+@media screen and (max-width: 500px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+
+    .header-right {
+        float: none;
+    }
 }

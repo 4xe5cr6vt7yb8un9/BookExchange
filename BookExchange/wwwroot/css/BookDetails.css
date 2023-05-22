@@ -1,0 +1,62 @@
+﻿.main {
+    display: flex;
+    flex-direction: row;
+}
+
+.main {
+    background-color: gainsboro;
+    width: 80%;
+    border-radius: 10px;
+    position: relative;
+    top: 10%;
+    margin: auto;
+    padding: 20px;
+    padding-bottom: 0px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    transition-duration: 0.4s;
+    flex-direction: row;
+    align-items: center;
+}
+
+.details {
+    border-bottom-style: solid;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold !important;
+    text-align: center;
+}
+
+.ActionContainer {
+    padding-left: 20px;
+}
+
+body {
+    overflow: hidden;
+}
+
+.col-sm-10 {
+    max-height: 25rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.button {
+    transition-duration: 0.2s;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 32px;
+    border: none;
+    border-radius: 15px;
+    background-color: #005493;
+    display: inline-block;
+    margin: 15px;
+}
+
+    .button:hover {
+        background-color: #00aeff;
+        color: white;
+    }
