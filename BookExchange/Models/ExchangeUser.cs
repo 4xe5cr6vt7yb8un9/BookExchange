@@ -16,16 +16,21 @@ namespace BookExchange.Models
     {
         public Guid Id { get; set; }
 
-        [Display(Name = "Loaner Name")]
+        [Required]
+        [Display(Name = "Name")]
         public String LoanerName { get; set; }
 
-        [Display(Name = "Loaner Email")]
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
         public String LoanerEmail { get; set; }
 
+        [Required]
+        [StringLength(13, ErrorMessage = "ISBN must be 13 characters long")]
         [Display(Name = "Book ISBN")]
         public String ISBN { get; set; }
 
-        [Display(Name = "Loaned Date")]
+        [Display(Name = "Date")]
         public DateTime LoanDate { get; set; }
     }
     public class Rents
