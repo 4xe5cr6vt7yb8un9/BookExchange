@@ -17,12 +17,33 @@ namespace BookExchange.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Page(string query, string sortOrder, int startIndex, int pageSize)
+        [Route("Books/{pageNumber?}/{searchString?}")]
+        public async Task<IActionResult> Page(string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
             var books = from book in _context.Book
                         select book;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Title.Contains(searchString)
+                                       || s.Author.Contains(searchString));
+            }
+
             books = sortOrder switch
             {
                 "name_desc" => books.OrderByDescending(book => book.Title),
@@ -31,11 +52,12 @@ namespace BookExchange.Controllers
                 _ => books.OrderBy(book => book.Title),
             };
 
-            var page = books.Skip((startIndex-1) * pageSize).Take(pageSize);
-            return View(await page.AsNoTracking().ToListAsync());
+            int pageSize = 6;
+            return View(await PaginatedList<Book>.CreateAsync(books.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Books/Details/5
+        [Route("Books/Details/{id?}")]
         public async Task<IActionResult> Details(Guid? id, String? isbn)
         {
             if (id == null && isbn == null || _context.Book == null)
@@ -66,29 +88,32 @@ namespace BookExchange.Controllers
         }
 
         // GET: Books/Create
-        public IActionResult Create()
+        [Route("Books/Create/{book?}")]
+        public IActionResult Create(Book? book)
         {
-            return View();
+            return View(book);
         }
 
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkBookID=317598.
-        [HttpPost]
+        [HttpPost("Books/Create/{book?}"), ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookID,Title,Author,Description,Published,ISBN,Available")] Book book)
+        public async Task<IActionResult> CreatePost([Bind("BookID,Title,Author,Description,Published,ISBN,Available")] Book book)
         {
             if (ModelState.IsValid)
             {
                 book.BookID = Guid.NewGuid();
+                book.Available = 0;
                 _context.Add(book);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Page));
             }
             return View(book);
         }
 
         // GET: Books/Create
+        [Route("Books/CreateISBN")]
         public IActionResult CreateISBN()
         {
             return View();
@@ -97,53 +122,13 @@ namespace BookExchange.Controllers
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkBookID=317598.
-        [HttpPost]
+        [HttpPost("Books/CreateISBN")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateISBN(String ISBN)
+        public IActionResult CreateISBN(String ISBN)
         {
             Book? book = ISBNScraper.ISBNGrabAsync(ISBN).Result;
 
-            if (ModelState.IsValid && book != null)
-            {
-                book.BookID = Guid.NewGuid();
-                _context.Add(book);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(book);
-        }
-
-        public async Task<IActionResult> Loan(Guid? id)
-        {
-            if (id == null || _context.Book == null)
-            {
-                return NotFound();
-            }
-
-            var Book = await _context.Book.FindAsync(id);
-            if (Book == null)
-            {
-                return NotFound();
-            }
-            return View();
-        }
-
-        [HttpPost, ActionName("Loan")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoanCon(Guid? id)
-        {
-            if (id == null || _context.Book == null)
-            {
-                return NotFound();
-            }
-
-            var loans = await _context.Book.FindAsync(id);
-            if (loans == null)
-            {
-                return NotFound();
-            }
-
-            return RedirectToAction("LoanBook", "Loans", loans.ISBN);
+            return RedirectToAction(nameof(Create), book);
         }
 
         // GET: Books/Edit/5
@@ -231,7 +216,7 @@ namespace BookExchange.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Page));
         }
 
         private bool BookExists(Guid id)
