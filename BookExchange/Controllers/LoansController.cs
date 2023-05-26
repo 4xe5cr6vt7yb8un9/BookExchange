@@ -21,23 +21,46 @@ namespace BookExchange.Controllers
         }
 
         // GET: Loans
-        public async Task<IActionResult> Index()
+        [Route("Loans/{pageNumber?}/{seachString?}")]
+        public async Task<IActionResult> Page(string searchString, string currentFilter, int? pageNumber)
         {
-            return _context.Loans != null ?
-                        View(await _context.Loans.ToListAsync()) :
-                        Problem("Entity set 'BookExchangeContext.Loans'  is null.");
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var loans = from loan in _context.Loans
+                        select loan;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                loans = loans.Where(s => s.ISBN.Contains(searchString));
+            }
+
+            loans = loans.OrderByDescending(loans => loans.LoanDate);
+
+            int pageSize = 11;
+            return View(await PaginatedList<Loans>.CreateAsync(loans.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Loans/Create
-        public IActionResult Create(String isbn)
-        {            
+        [Route("Loans/Create/{isbn?}")]
+        public IActionResult Create(String? isbn)
+        {
             return View();
         }
 
         // POST: Loans/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Loans/Create/{isbn?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,LoanerName,LoanerEmail,ISBN,LoanDate")] Loans loans)
         {
@@ -47,49 +70,9 @@ namespace BookExchange.Controllers
                 loans.LoanDate = DateTime.Now;
                 _context.Add(loans);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Page));
             }
             return View(loans);
-        }
-
-        public async Task<IActionResult> Rent(Guid? id)
-        {
-            if (id == null || _context.Loans == null)
-            {
-                return NotFound();
-            }
-
-            var loans = await _context.Loans.FindAsync(id);
-            if (loans == null)
-            {
-                return NotFound();
-            }
-            return View();
-        }
-
-        [HttpPost, ActionName("Rent")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RentCon(Guid? id)
-        {
-            if (id == null || _context.Loans == null)
-            {
-                return NotFound();
-            }
-
-            var loans = await _context.Loans.FindAsync(id);
-            if (loans == null)
-            {
-                return NotFound();
-            }
-
-            Rents rents = (new Rents
-            {
-                RentedFrom = loans.LoanerName,
-                ISBN = loans.ISBN
-            });
-            rents.Print();
-
-            return RedirectToAction("RentBook", "Rents", rents);
         }
 
         // GET: Loans/Delete/5
@@ -126,7 +109,7 @@ namespace BookExchange.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Page));
         }
 
         private bool LoansExists(Guid id)
