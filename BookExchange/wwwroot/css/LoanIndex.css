@@ -1,2 +1,114 @@
-﻿body {
+﻿.main {
+    margin-top: 40px;
 }
+
+.holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #abe2f172;
+    border-radius: 15px;
+    width: 100%;
+    height: 78vh;
+    overflow: auto;
+    position: relative;
+}
+
+.rent {
+    color: mediumblue;
+    text-decoration: underline;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    user-select: unset;
+}
+
+th, td {
+    border-bottom: 0px;
+    padding-left: 20px !important;
+    line-height: 35px;
+    text-align: center;
+}
+
+th {
+    font-size: 1.3rem;
+    background-color: #005493 !important;
+    color: white;
+}
+
+tr:hover {
+    background-color: #00aeff;
+    color: white !important;
+}
+ 
+th:first-child {
+    border-top-left-radius: 15px;
+}
+th:last-child {
+    border-top-right-radius: 15px;
+}
+
+td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+tbody tr {
+    width: 50rem;
+    font-size: 1.02rem;
+}
+
+.container {
+    width: 100vw;
+}
+
+.pagination {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+    .pagination a {
+        color: white;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #1d73ae99;
+        margin: 0 4px;
+        background-color: #1d73ae99;
+    }
+
+        .pagination a.active {
+            background-color: #005493;
+            color: white;
+            border: 1px solid #005493;
+        }
+
+        .pagination a.disabled {
+            background-color: #5374a399;
+            color: black;
+            border: 1px solid #5374a399;
+        }
+
+        .pagination a:hover:not(.active):not(.disabled) {
+            background-color: #00aeff;
+        }
+
+        .pagination a:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .pagination a:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
