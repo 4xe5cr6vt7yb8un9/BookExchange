@@ -30,7 +30,7 @@ namespace BookExchange.Models
         [Display(Name = "Book ISBN")]
         public String ISBN { get; set; }
 
-        [Display(Name = "Date")]
+        [Display(Name = "Date Donated")]
         public DateTime LoanDate { get; set; }
     }
     public class Rents
