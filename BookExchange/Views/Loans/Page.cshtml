@@ -1,0 +1,95 @@
+﻿@model PaginatedList<BookExchange.Models.Loans>
+
+@{
+    ViewData["Title"] = "Loans";
+}
+
+<head>
+    <title>BookSearch</title>
+
+    <link rel="stylesheet" href="~/css/LoanIndex.css" asp-append-version="true" />
+    <script src="~/js/LoanIndex.js" asp-append-version="true"></script>
+</head>
+
+<body>
+    <div class="main">
+        <div class="holder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Contact Email
+                        </th>
+                        <th>
+                            Donated Book
+                        </th>
+                        <th>
+                            Date Donated
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LoanerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LoanerEmail)
+                            </td>
+                            <td>
+                                <a href="/Books/Details?ISBN=@Html.DisplayFor(modelItem => item.ISBN)">@Html.DisplayFor(modelItem => item.ISBN)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LoanDate)
+                            </td>
+
+                            <td>
+                                <a class="rent" asp-action="Rent" asp-route-id="@item.Id">Acquire</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @{
+                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                var currentPage = "";
+            }
+
+            <div class="pagination">
+                <a asp-action="Page"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="@prevDisabled">
+                    &laquo;
+                </a>
+
+                @for (var i = 1; i <= @Model.TotalPages; i++)
+                {
+                    currentPage = (i == Model.PageIndex) ? "active" : "";
+
+                    <a asp-action="Page"
+                   asp-route-pageNumber="@i"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="@currentPage">
+                        @i.ToString()
+                    </a>
+                }
+
+                <a asp-action="Page"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="@nextDisabled">
+                    &raquo;
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
