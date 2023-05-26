@@ -56,13 +56,13 @@
         </div>
 
         <div class="ActionContainer">
-            <a class="button" asp-action="Edit" asp-route-id="@Model?.BookID">Edit Book</a>
-            <a class="button" asp-controller="Loans" asp-action="Create" asp-route-ISBN="@Model?.ISBN">Donate Book</a>
-            <a class="button" asp-area="" asp-controller="Loans" asp-action="Index">Get Book</a>
+            <a class="button" asp-action="Edit" asp-route-id="@Model?.BookID">Edit</a>
+            <a class="button" asp-controller="Loans" asp-action="Create" asp-route-ISBN="@Model?.ISBN">Donate</a>
+            <a class="button" asp-area="" asp-route-searchString="@Model?.ISBN" asp-controller="Loans" asp-action="Page">Acquire</a>
         </div>
     </div>
 
     <div id="returnButton">
-        <a class="button" asp-action="Index">Back to List</a>
+        <a class="button" asp-action="Page">Back to List</a>
     </div>
 </body>
