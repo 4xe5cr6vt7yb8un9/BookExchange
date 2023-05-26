@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BookExchange.Models.Book>
+﻿@model PaginatedList<BookExchange.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Books";
     var modelNum = 0;
 }
 
@@ -9,13 +9,14 @@
     <title>BookSearch</title>
 
     <link rel="stylesheet" href="~/css/BookIndex.css" asp-append-version="true" />
+    <script src="~/js/BookIndex.js" asp-append-version="true"></script>
 </head>
 
 <body>
     <div class="main">
 
         <div class="searchContainer">
-            <form asp-action="Index" method="get">
+            <form asp-action="Page" method="get">
                 <div class="form-actions no-color">
                     <input type="text" id="searchBar" placeholder="Search..." name="SearchString" value="@ViewData["CurrentFilter"]">
                     <input type="submit" value="Search" class="SearchButton" />
@@ -24,7 +25,6 @@
         </div>
 
         <table>
-
             @foreach (var item in Model)
             {
                 var ISBN = item.ISBN;
@@ -61,21 +61,41 @@
 
         </table>
 
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+            var currentPage = "";
+        }
+
         <div class="pagination">
-            <a href="#">&laquo;</a>
-            
-            @for (var i=1; i<=6; i++)
+            <a asp-action="Page"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="@prevDisabled">
+                &laquo;
+            </a>
+
+            @for (var i=1; i<=@Model.TotalPages; i++)
             {
-                @Html.ActionLink(i.ToString(),
-                    "Page",
-                    "Books",
-                    new {
-                        query = "",
-                        startIndex = i
-                    })
+                currentPage = (i == Model.PageIndex) ? "active" : "";
+
+                <a asp-action="Page"
+                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                    asp-route-pageNumber="@i"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    class="@currentPage">
+                        @i.ToString()
+                </a>
             }
             
-            <a href="#">&raquo;</a>
-        </div
+            <a asp-action="Page"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="@nextDisabled">
+                &raquo;
+            </a>
+        </div>
     </div>
 </body>
