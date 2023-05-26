@@ -4,10 +4,6 @@
     overflow: auto;
 }
 
-#page {
-    margin-top: 6rem;
-}
-
 #c1 {
     position: relative;
     width: 50rem;
@@ -69,7 +65,7 @@ html {
 
 #text {
     position: relative;
-    top: 20px;
+    top: 40px;
     border-bottom: 1px solid #ccc;
 }
 

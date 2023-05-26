@@ -5,36 +5,25 @@
 }
 
 #page {
-    margin-top: 6rem;
+    height: 866px;
 }
 
 #c1 {
-    position: relative;
-    width: 50rem;
-}
-
-html {
-    font-size: inherit;
-}
-
-.container {
-    max-width: max-content !important;
+    position: absolute;
+    top: 15%;
+    height: 60%;
+    width: max-content;
 }
 
 .w3-btn {
     color: #fff !important;
     background-color: #0D6EFF !important;
     border-color: #0d6efd !important;
-    margin: 15px;
 }
 
 #c2 {
-    height: 6rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: center;
+    height: 125px;
+    width: 800px;
 }
 
 #input {
@@ -68,12 +57,20 @@ html {
 }
 
 #text {
-    position: relative;
-    top: 20px;
+    position: absolute;
+    top: 40px;
     border-bottom: 1px solid #ccc;
 }
 
+html {
+    font-size: 14px;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
-    font-family: var(--bs-font-sans-serif);
-    font-size: inherit;
+    margin-bottom: 60px;
 }

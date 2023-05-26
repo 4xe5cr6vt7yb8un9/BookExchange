@@ -44,27 +44,22 @@ app.Use(async (context, next) =>
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "Books",
-    pattern: "Books/{startIndex}",
+    pattern: "Books/{action=Page}/{pageNumber}",
     defaults: new
     {
         controller = "Books",
         action = "Page",
-        startIndex = 1,
-        pageSize = 6
+        pageNumber = 1,
     }
     );
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.Run();
