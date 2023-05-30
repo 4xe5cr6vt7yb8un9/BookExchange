@@ -8,50 +8,64 @@
 
 <div class="mainBody">
 
-    <div>
-        <h1 id="Welcome">
-            WELCOME!
-        </h1>
+    <h1 id="Welcome">
+        WELCOME!
+    </h1>
 
-        <div id="bodyBackground"></div>
+    <div id="bodyBackground">
 
-        <h2 id="header1">
-            Berwick Book Exchange
-        </h2>
+        <div>
+            <h2 id="header1">
+                Berwick Book Exchange
+            </h2>
 
-        <hr>
+            <hr>
 
-        <p id="description">
-            The Berwick Book Exchange,  
-            is a resource for students to exhange and loan out old books 
-            to students looking for them. Our hope is that through this program
-            students and parents can save money on books for the upcoming school year.
-        </p>
+            <p id="description">
+                The Berwick Book Exchange,
+                is a resource for students to exhange and loan out old books
+                to students looking for them. Our hope is that through this program
+                students and parents can save money on books for the upcoming school year.
+            </p>
 
+        </div>
+
+        <div class="buttonContainer">
+            <div>
+                <h2 id="header2">
+                    Donate Your First Book
+                </h2>
+
+                <hr>
+
+                <a class="button" id="Click2Start" asp-area="" asp-controller="Loans" asp-action="Create">
+                    Click Here to Get Started!
+                </a>
+            </div>
+
+            <div>
+                <h2 id="header3">
+                    Previously Used Books
+                </h2>
+
+                <hr>
+
+                <a class="button" id="Click4List" asp-area="" asp-controller="Books" asp-action="Page">
+                    Click Here for the List
+                </a>
+            </div>
+
+            <div>
+                <h2 id="header2">
+                    Cant find a book?
+                </h2>
+
+                <hr>
+
+                <a class="button" id="Click4List" asp-area="" asp-controller="Books" asp-action="CreateISBN">
+                    Click here to add a new Book
+                </a>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <h2 id="header2">
-            Donate Your First Book 
-        </h2>
-
-        <hr>
-
-        <a class="button" id="Click2Start" asp-area="" asp-controller="Loans" asp-action="Create">
-            Click Here to Get Started!
-        </a>
-    </div>
-
-    <div>
-        <h2 id="header3">
-            See a List of Previously Used Books
-        </h2>
-
-        <hr>
-
-        <a class="button" id="Click4List" asp-area="" asp-controller="Books" asp-action="Page">
-            Click Here for the List
-        </a>
-    </div>
-
 </div>
