@@ -44,7 +44,7 @@
                         <div class="bookInfo">
                             <h2 id="bookTitle">@Html.DisplayFor(modelItem => item.Title)</h2>
                             <h4 id="author">@Html.DisplayFor(modelItem => item.Author)</h4>
-                            <p id="ISBN">ISBN-13: @Html.DisplayFor(modelItem => item.ISBN)</p>
+                            <p id="ISBN">ISBN: @Html.DisplayFor(modelItem => item.ISBN)</p>
                         </div>
 
                         <a class="button" asp-action="Details" asp-route-id="@item.BookID">Details</a>
