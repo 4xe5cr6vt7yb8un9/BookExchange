@@ -12,7 +12,7 @@ body {
 }
 
 .mainBody {
-    margin-top: 5rem;
+    margin-top: 5vh;
     color: black;
 }
 
@@ -20,26 +20,35 @@ body {
     margin-left: 40px;
     border-bottom-style: solid;
     font-family: 'Poppins', sans-serif;
-    font-size: calc(2em + var(--fontGrowth)) !important;
+    font-size: 3em !important;
     font-weight: bold !important;
     width: 30%;
 }
 
 #bodyBackground {
     background-color: #EEEEEF;
-    width: 950px;
-    height: calc(475px + .5vw);
-    position: fixed;
-    margin-top: 10px;
+    width: 50vw;
+    height: 55vh;
+    position: relative;
+    margin-top: 1vh;
+    padding: 1em;
     margin-left: 30px;
     border-radius: 3px;
-    z-index: -999;
     box-shadow: 4px 4px 10px darkgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+@media screen and (max-width: 1500px) {
+    #bodyBackground {
+        width: 65vw;
+    }
 }
 
 #header1 {
     position: relative;
-    margin-top: 30px;
     margin-left: 60px;
     font-size: calc(1.5em + var(--fontGrowth))) !important;
     font-weight: bold !important;
@@ -111,4 +120,12 @@ hr {
 #Click4List {
     margin-top: 8px;
     margin-left: 80px;
+}
+
+.buttonContainer {
+    height: 30vh;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: flex-start;
 }

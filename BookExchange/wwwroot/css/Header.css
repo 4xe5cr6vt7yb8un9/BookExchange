@@ -9,6 +9,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
 a {
     user-select: none;
+    color: #0077cc;
 }
 
 body {
@@ -25,7 +26,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 60px;
+    height: 7vh;
     width: 100%;
     font-family: 'Roboto', sans-serif;
 }
@@ -36,13 +37,13 @@ body {
         text-align: center;
         padding: 12px;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 2.3vh;
         line-height: 25px;
         border-radius: 4px;
     }
         /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
         .header a.logo {
-            font-size: 25px;
+            font-size: 2em;
             font-weight: bold;
         }
         /* Change the background color on mouse-over */
@@ -80,16 +81,16 @@ body {
     }
 
 #watchtower {
-    height: 45px;
+    height: 5vh;
     position: relative;
 }
 
 #BBE {
-    margin-left: 16px;
+    margin-left: 1em;
     color: white;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 1em;
     margin-bottom: 0;
 }
 
@@ -98,11 +99,6 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
 }
-
-a {
-  color: #0077cc;
-}
-
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
@@ -131,6 +127,10 @@ button.accept-policy {
   line-height: inherit;
 }
 
+.foot-container {
+    padding-left: 5vw;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -138,7 +138,7 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
   background-color: aliceblue;
-  height: 4rem;
+  height: 7vh;
 }
 
 @media screen and (max-width: 500px) {
