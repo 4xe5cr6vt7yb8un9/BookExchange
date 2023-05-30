@@ -38,45 +38,53 @@ namespace BookExchange.Actions
 
         public static async Task<Book?> ISBNGrabAsync(String ISBN)
         {
-            BookApi GBooks = new("AIzaSyCl83uxcTL1Zg4p_mxUajhJhEHsjgUy94k");
-            List<ISBNData> results = GBooks.Search("ISBN:" + ISBN);
-            ISBNData? correctBook = null;
-
-            Book newBook = new();
-
-            IEnumerable<ISBNData> bookQuery = 
-                from book in results 
-                from identity in book.IndustryIdentifiers
-                where identity.Identifier.Equals(ISBN)
-                select book; 
-
-            foreach (var book in bookQuery)
+            try
             {
-                correctBook = book;
-            }
+                BookApi GBooks = new("AIzaSyCl83uxcTL1Zg4p_mxUajhJhEHsjgUy94k");
+                List<ISBNData> results = GBooks.Search("ISBN:" + ISBN);
+                ISBNData? correctBook = null;
 
-            if (correctBook != null)
-            {
-                StringBuilder authors = new("");
+                Book newBook = new();
 
-                foreach (var author in correctBook.Authors.ToArray())
+                IEnumerable<ISBNData> bookQuery =
+                    from book in results
+                    from identity in book.IndustryIdentifiers
+                    where identity.Identifier.Equals(ISBN)
+                    select book;
+
+                foreach (var book in bookQuery)
                 {
-                    authors.Append(author + ", ");
+                    correctBook = book;
                 }
 
-                newBook.ISBN = ISBN;
-                newBook.Author = authors.ToString();
-                newBook.Title = correctBook.Title;
-                newBook.Published = correctBook.Published_date;
-                newBook.Description = correctBook.Description;
+                if (correctBook != null)
+                {
+                    StringBuilder authors = new("");
 
-                if (correctBook.ImageLinks != null)
-                    await DownloadImage(correctBook.ImageLinks.Thumbnail, ISBN);
+                    foreach (var author in correctBook.Authors.ToArray())
+                    {
+                        authors.Append(author + ", ");
+                    }
 
-                return newBook;
+                    newBook.ISBN = ISBN;
+                    newBook.Author = authors.ToString();
+                    newBook.Title = correctBook.Title;
+                    newBook.Published = correctBook.Published_date;
+                    newBook.Description = correctBook.Description;
+
+                    if (correctBook.ImageLinks != null)
+                        await DownloadImage(correctBook.ImageLinks.Thumbnail, ISBN);
+
+                    return newBook;
+                }
+
+                return null;
             }
-
-            return null;
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unable to find book: " + ex.Message);
+                return null;
+            }
         }
     }
 
