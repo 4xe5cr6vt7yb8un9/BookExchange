@@ -7,4 +7,6 @@ $(document).ready(function () {
         $(this).find('a').css('color', 'black');
         $('.rent').css('color', 'mediumblue');
     })
+
+    $(".disabled").removeAttr("href")
 })
