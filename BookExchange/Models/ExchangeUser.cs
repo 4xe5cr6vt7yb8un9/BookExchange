@@ -26,7 +26,7 @@ namespace BookExchange.Models
         public String LoanerEmail { get; set; }
 
         [Required]
-        [StringLength(13, ErrorMessage = "ISBN must be 13 characters long")]
+        [StringLength(13, ErrorMessage = "ISBN must be less than 13 characters long")]
         [Display(Name = "Book ISBN")]
         public String ISBN { get; set; }
 

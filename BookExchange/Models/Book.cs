@@ -23,7 +23,7 @@ namespace BookExchange.Models
         public String? Published { get; set; }
 
         [Required(ErrorMessage = "Book ISBN is Required")]
-        [Display(Name = "ISBN-13")]
+        [Display(Name = "ISBN")]
         public String ISBN { get; set; }
 
         public int Available { get; set; }
