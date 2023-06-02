@@ -1,4 +1,5 @@
 using Google.Apis.Books.v1.Data;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
@@ -23,6 +24,8 @@ namespace BookExchange.Models
         public String? Published { get; set; }
 
         [Required(ErrorMessage = "Book ISBN is Required")]
+        [StringLength(13, MinimumLength = 10, ErrorMessage = "ISBN must be between 10 and 13 characters")]
+        [RegularExpression(@"^[+]?[0-9]+$", ErrorMessage = "Only Numbers are allowed")]
         [Display(Name = "ISBN")]
         public String ISBN { get; set; }
 
