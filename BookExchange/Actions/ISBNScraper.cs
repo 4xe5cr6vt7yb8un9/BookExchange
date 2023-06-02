@@ -18,6 +18,8 @@ namespace BookExchange.Actions
 {
     public static class ISBNScraper
     {
+        private static readonly String apiKey = "AIzaSyCl83uxcTL1Zg4p_mxUajhJhEHsjgUy94k";
+
         public async static Task DownloadImage(String URL, String ISBN)
         {
             Uri uri = new(URL);
@@ -30,9 +32,41 @@ namespace BookExchange.Actions
                                 FileMode.CreateNew);
                 await response.Content.CopyToAsync(fs);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Unable to Save File");
+                Debug.WriteLine("Unable to Save File");
+                Console.WriteLine("Unable to Save File: " + ex.Message);
+            }
+        }
+
+        public static Boolean bookExists(String ISBN)
+        {
+            try
+            {
+                BookApi GBooks = new(apiKey);
+                List<ISBNData> results = GBooks.Search("ISBN:" + ISBN);
+                ISBNData? correctBook = null;
+
+                Book newBook = new();
+
+                IEnumerable<ISBNData> bookQuery =
+                    from book in results
+                    from identity in book.IndustryIdentifiers
+                    where identity.Identifier.Equals(ISBN)
+                    select book;
+
+                foreach (var book in bookQuery)
+                {
+                    correctBook = book;
+                }
+
+                Debug.WriteLine(correctBook != null);
+                return correctBook != null;
+            }
+            catch (Exception) {
+                Debug.WriteLine("Error while Verifing Book");
+                Console.WriteLine("Error while Verifing Book");
+                return false;
             }
         }
 
@@ -40,7 +74,7 @@ namespace BookExchange.Actions
         {
             try
             {
-                BookApi GBooks = new("AIzaSyCl83uxcTL1Zg4p_mxUajhJhEHsjgUy94k");
+                BookApi GBooks = new(apiKey);
                 List<ISBNData> results = GBooks.Search("ISBN:" + ISBN);
                 ISBNData? correctBook = null;
 
@@ -82,6 +116,7 @@ namespace BookExchange.Actions
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("Unable to find book: " + ex.Message);
                 Console.WriteLine("Unable to find book: " + ex.Message);
                 return null;
             }

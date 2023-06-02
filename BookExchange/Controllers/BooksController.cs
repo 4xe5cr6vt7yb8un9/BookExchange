@@ -3,6 +3,7 @@ using BookExchange.Data;
 using BookExchange.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Drawing.Printing;
 
 namespace BookExchange.Controllers
@@ -126,12 +127,25 @@ namespace BookExchange.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateISBN(String ISBN)
         {
-            Book? book = ISBNScraper.ISBNGrabAsync(ISBN).Result;
+            Boolean exists = Actions.ISBNScraper.bookExists(ISBN);
+            Debug.WriteLine(exists);
+            Console.WriteLine(exists);
+            if (!exists)
+            {
+                ModelState.AddModelError(nameof(ISBN), "Unable to find book information");
+            }
 
-            return RedirectToAction(nameof(Create), book);
+            if (ModelState.IsValid)
+            {
+                Book? book = ISBNScraper.ISBNGrabAsync(ISBN).Result;
+
+                return RedirectToAction(nameof(Create), book);
+            }
+            return View();
         }
 
         // GET: Books/Edit/5
+        [Route("Books/Edit/{id}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null || _context.Book == null)
@@ -150,7 +164,7 @@ namespace BookExchange.Controllers
         // POST: Books/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkBookID=317598.
-        [HttpPost]
+        [HttpPost("Books/Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("BookID,Title,Author,Description,Published,ISBN,Available")] Book book)
         {
@@ -183,6 +197,7 @@ namespace BookExchange.Controllers
         }
 
         // GET: Books/Delete/5
+        [Route("Books/Delete/{id}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.Book == null)
@@ -201,7 +216,7 @@ namespace BookExchange.Controllers
         }
 
         // POST: Books/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Books/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
