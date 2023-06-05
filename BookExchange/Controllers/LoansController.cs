@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookExchange.Data;
 using BookExchange.Models;
-using BookExchange.Controllers;
 
 namespace BookExchange.Controllers
 {
@@ -24,7 +18,7 @@ namespace BookExchange.Controllers
         [Route("Loans/{pageNumber?}/{seachString?}")]
         public async Task<IActionResult> Page(string searchString, string currentFilter, int? pageNumber)
         {
-
+            // Redirects to page 1 when a search query is present
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -36,17 +30,20 @@ namespace BookExchange.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
+            // Creates list of all loans present in database
             var loans = from loan in _context.Loans
                         select loan;
 
+            // Searches loans by ISBN is search query is present
             if (!String.IsNullOrEmpty(searchString))
             {
                 loans = loans.Where(s => s.ISBN.Contains(searchString));
             }
 
+            // Orders loans by date loaned
             loans = loans.OrderByDescending(loans => loans.LoanDate);
 
-            int pageSize = 11;
+            int pageSize = 11; // Amount of content to display on page
             return View(await PaginatedList<Loans>.CreateAsync(loans.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
@@ -54,6 +51,7 @@ namespace BookExchange.Controllers
         [Route("Loans/Create/{isbn?}")]
         public IActionResult Create(String? isbn)
         {
+            // Display Loan create form
             return View();
         }
 
@@ -66,9 +64,9 @@ namespace BookExchange.Controllers
         {
             if (ModelState.IsValid)
             {
-                loans.Id = Guid.NewGuid();
-                loans.LoanDate = DateTime.Now;
-                _context.Add(loans);
+                loans.Id = Guid.NewGuid(); // Creates a new GUID
+                loans.LoanDate = DateTime.Now; // Sets date to now
+                _context.Add(loans); // Adds new Loan to database
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Page));
             }
@@ -78,11 +76,13 @@ namespace BookExchange.Controllers
         // GET: Loans/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
+            // If id is not present a not found page is returned
             if (id == null || _context.Loans == null)
             {
                 return NotFound();
             }
 
+            // Queries loan table by id and displays loan info
             var loans = await _context.Loans
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (loans == null)
@@ -98,10 +98,13 @@ namespace BookExchange.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            // Confirms loan table exists 
             if (_context.Loans == null)
             {
                 return Problem("Entity set 'BookExchangeContext.Loans'  is null.");
             }
+
+            // Finds loan by ID and deletes it
             var loans = await _context.Loans.FindAsync(id);
             if (loans != null)
             {
@@ -112,6 +115,7 @@ namespace BookExchange.Controllers
             return RedirectToAction(nameof(Page));
         }
 
+        // Confirms that loan exists in database.
         private bool LoansExists(Guid id)
         {
             return (_context.Loans?.Any(e => e.Id == id)).GetValueOrDefault();

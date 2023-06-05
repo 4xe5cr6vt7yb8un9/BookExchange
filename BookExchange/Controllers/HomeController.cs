@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BookExchange.Models;
-using BookExchange.Controllers;
 using System.Diagnostics;
-using BookExchange.Actions;
 
 namespace BookExchange.Controllers
 {
@@ -15,22 +13,20 @@ namespace BookExchange.Controllers
             _logger = logger;
         }
 
+        // Displays Home page
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
+        // Displays error page
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        // Display 404 error page
         [Route("/PageNotFound")]
         public IActionResult PageNotFound()
         {
