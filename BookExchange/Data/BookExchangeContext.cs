@@ -19,7 +19,5 @@ namespace BookExchange.Data
         public DbSet<BookExchange.Models.Loans>? Loans { get; set; }
 
         public DbSet<BookExchange.Models.ClassUsed>? ClassUsed { get; set; }
-
-        public DbSet<BookExchange.Models.Rents>? Rents { get; set; }
     }
 }
