@@ -16,3 +16,8 @@ $(document).ready(function () {
         $(".main").css("top", marg)
     }
 })
+
+function loadDefa() {
+    var defaSrc = $("#defa").attr('src')
+    $("#imgSrc").attr('src', defaSrc)
+}
