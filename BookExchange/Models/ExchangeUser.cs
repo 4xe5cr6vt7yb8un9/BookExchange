@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace BookExchange.Models
 {
@@ -32,33 +31,5 @@ namespace BookExchange.Models
 
         [Display(Name = "Date Donated")]
         public DateTime LoanDate { get; set; }
-    }
-    public class Rents
-    {
-        public Guid Id { get; set; }
-
-        [Display(Name = "Renter Name")]
-        public String RenterName { get; set; }
-
-        [Display(Name = "Renter Email")]
-        public String RenterEmail { get; set; }
-
-        [Display(Name = "Rented From")]
-        public String RentedFrom { get; set; }
-
-        public String ISBN { get; set; }
-
-        [Display(Name = "Rented Date")]
-        public DateTime RentDate { get; set; }
-
-        public void Print()
-        {
-            Console.WriteLine("ID: " + Id);
-            Console.WriteLine("RName: " + RenterName);
-            Console.WriteLine("REmail: " + RenterEmail);
-            Console.WriteLine("RFrom: " + RentedFrom);
-            Console.WriteLine("ISBN: " + ISBN);
-            Console.WriteLine("RDate: " + RentDate);
-        }
     }
 }
