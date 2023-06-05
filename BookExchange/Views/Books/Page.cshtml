@@ -28,7 +28,10 @@
             @foreach (var item in Model)
             {
                 var ISBN = item.ISBN;
+
                 var imageSource = @"\data\thumbnails\" + ISBN + ".jpg";
+                var defaultImage = @"\data\thumbnails\default.png";
+
                 var Start = "<tr>";
                 var End = "</tr>";
 
@@ -39,7 +42,8 @@
 
                 <td>
                     <div class="card hover">
-                        <img src=@imageSource>
+                        <img id="imgSrc" src=@imageSource onerror="loadDefa()">
+                        <img id="defa" src=@defaultImage style="display: none">
 
                         <div class="bookInfo">
                             <h2 id="bookTitle">@Html.DisplayFor(modelItem => item.Title)</h2>
