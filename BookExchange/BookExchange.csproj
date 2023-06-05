@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Shared\DisplayTemplates\**" />
+    <Content Remove="Views\Shared\DisplayTemplates\**" />
+    <EmbeddedResource Remove="Views\Shared\DisplayTemplates\**" />
+    <None Remove="Views\Shared\DisplayTemplates\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="Google.Apis.Books.v1" Version="1.60.0.2955" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
@@ -23,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\DisplayTemplates\" />
     <Folder Include="wwwroot\data\images\" />
   </ItemGroup>
 
