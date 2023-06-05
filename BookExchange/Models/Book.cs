@@ -1,8 +1,5 @@
 using Google.Apis.Books.v1.Data;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace BookExchange.Models
 {
@@ -28,8 +25,6 @@ namespace BookExchange.Models
         [RegularExpression(@"^[+]?[0-9]+$", ErrorMessage = "Only Numbers are allowed")]
         [Display(Name = "ISBN")]
         public String ISBN { get; set; }
-
-        public int Available { get; set; }
     }
 
     public class ClassUsed
@@ -44,10 +39,17 @@ namespace BookExchange.Models
     {
         public String Title { get; set; }
         public String? Subtitle { get; set; }
-        public IList<String> Authors { get; set; }
+        public IList<String?> Authors { get; set; }
         public String? Published_date { get; set; }
         public String? Description { get; set; }
         public IList<Volume.VolumeInfoData.IndustryIdentifiersData> IndustryIdentifiers { get; set; }
         public Volume.VolumeInfoData.ImageLinksData? ImageLinks { get; set; }
+
+        public void Print()
+        {
+            Console.WriteLine("Title: " + Title);
+            Console.WriteLine("Subtitle: " + Subtitle);
+            Console.WriteLine("PublishedDate: " + Published_date);
+        }
     }
 }
