@@ -1,8 +1,12 @@
 ﻿using BookExchange.Actions;
 using BookExchange.Data;
 using BookExchange.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Linq;
 
 namespace BookExchange.Controllers
 {
@@ -17,12 +21,8 @@ namespace BookExchange.Controllers
 
         // GET: Books
         [Route("Books/{pageNumber?}/{searchString?}")]
-        public async Task<IActionResult> Page(string searchString, string sortOrder, string currentFilter, int? pageNumber)
+        public async Task<IActionResult> Page(string searchString, string classSort, string currentFilter, int? pageNumber)
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-
             // Returns to the first page when searching books
             if (searchString != null)
             {
@@ -34,31 +34,55 @@ namespace BookExchange.Controllers
             }
 
             ViewData["CurrentFilter"] = searchString;
+            ViewData["ClassSort"] = classSort;
 
             // Queries database for books
             var books = from book in _context.Book
                         select book;
 
-            // If search query is not empty, sorts books by Title and Author
+            var classes = from class1 in _context.Classes
+                        select class1;
+
+            var classBook = from classB in _context.ClassBook
+                          select classB;
+
+            // If search query is not empty, string))
             if (!String.IsNullOrEmpty(searchString))
             {
                 books = books.Where(s => s.Title.Contains(searchString)
                                        || s.Author.Contains(searchString));
             }
 
-            // Sorts book list by desired sort order
-            books = sortOrder switch
+            // If classSort is not empty, sort books by class
+            if (!String.IsNullOrEmpty(classSort))
             {
-                "name_desc" => books.OrderByDescending(book => book.Title),
-                "Date" => books.OrderBy(book => book.Published),
-                "date_desc" => books.OrderByDescending(book => book.Published),
-                _ => books.OrderBy(book => book.Title),
-            };
+                var claBook = classBook.Where(s => s.ClassID == Guid.Parse(classSort));
+
+                books = books.Where(s => claBook.Any(x => x.BookID == s.BookID));
+            }
+
+            // Sorts book list by title in ascending order
+            books = books.OrderBy(book => book.Title);
 
             int pageSize = 6; // Amount of items to display on page
 
+            var pageList = await PaginatedList<Book>.CreateAsync(books.AsNoTracking(), pageNumber ?? 1, pageSize);
+            var classList = classes.ToList();
+
+            BookClassIndex pageData = new()
+            {
+                Books = pageList,
+                Classes = classList,
+            };
+
             // Creates a Paged List of book model and casts to view
-            return View(await PaginatedList<Book>.CreateAsync(books.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(pageData);
+        }
+
+        [HttpPost, ActionName("Page")]
+        public void PagePost(string sortOrder)
+        {
+            ViewData["CurrentSort"] = sortOrder;
         }
 
         // GET: Books/Details/5
@@ -71,6 +95,22 @@ namespace BookExchange.Controllers
                 return NotFound();
             }
 
+            // If ISBN variable is present 
+            // Finds book details using isbn
+            if (isbn != null)
+            {
+                // Queries database by book ISBN
+                var book = await _context.Book
+                    .FirstOrDefaultAsync(m => m.ISBN13 == isbn || m.ISBN10 == isbn);
+
+                if (book == null)
+                {
+                    return NotFound();
+                }
+
+                id = book.BookID;
+            }
+
             // If ID variable is present 
             // Finds book details using id
             if (id != null)
@@ -78,24 +118,18 @@ namespace BookExchange.Controllers
                 // Queries database by book id
                 var book = await _context.Book
                     .FirstOrDefaultAsync(m => m.BookID == id);
-                if (book == null)
-                {
-                    return NotFound();
-                }
-                return View(book);
-            }
 
-            // If ISBN variable is present 
-            // Finds book details using isbn
-            if (isbn != null)
-            {
-                // Queries database by book ISBN
-                var book = await _context.Book
-                    .FirstOrDefaultAsync(m => m.ISBN == isbn);
                 if (book == null)
                 {
                     return NotFound();
                 }
+
+                var classB = _context.ClassBook
+                    .Where(m => m.BookID == id);
+
+                var class1 = _context.Classes.Where(s => classB.Any(x => x.ClassID == s.ClassID));
+                ViewBag.Classes = class1;
+
                 return View(book);
             }
 
@@ -107,6 +141,9 @@ namespace BookExchange.Controllers
         [Route("Books/Create/{book?}")]
         public IActionResult Create(Book? book)
         {
+            // Groups classes by grades and sends to view
+            ViewBag.ClassItems = classList();
+
             // Displays book creation form
             return View(book);
         }
@@ -116,16 +153,41 @@ namespace BookExchange.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkBookID=317598.
         [HttpPost("Books/Create/{book?}"), ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost([Bind("BookID,Title,Author,Description,Published,ISBN,Available")] Book book)
+        public async Task<IActionResult> CreatePost([Bind("BookID,Title,Subtitle,Author,Description,Published,ISBN13,ISBN10,ClassIds")] Book book)
         {
+            if (book.ISBN13 == null)
+            {
+                ModelState.AddModelError("ISBN13", "An ISBN number is needed");
+            }
+            if (book.ISBN10 == null)
+            {
+                ModelState.AddModelError("ISBN10", "An ISBN number is needed");
+            }
             // Confirms if required variables are present 
             if (ModelState.IsValid)
             {
+                Console.WriteLine(book.ClassIds.First().ToString());
                 book.BookID = Guid.NewGuid(); // Creates a new GUID
                 _context.Add(book); // Adds Book to database
+
+                foreach (var class1 in book.ClassIds.ToList())
+                {
+                    ClassBook cb = new()
+                    {
+                        id = Guid.NewGuid(),
+                        BookID = book.BookID,
+                        ClassID = class1
+                    };
+                    _context.Add(cb);
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Page)); // Redirects to book list page
             }
+
+            // Groups classes by grades and sends to view
+            ViewBag.ClassItems = classList();
+
             // Returns errors to user if present
             return View(book);
         }
@@ -151,12 +213,13 @@ namespace BookExchange.Controllers
             // If the book does not exist in database an error is return to user
             if (!exists)
             {
+                ViewBag.Error = 1;
                 ModelState.AddModelError(nameof(ISBN), "Unable to find book information");
             }
 
             // Queries database if book was already added
             var dataBook = await _context.Book
-                    .FirstOrDefaultAsync(m => m.ISBN == ISBN);
+                    .FirstOrDefaultAsync(m => m.ISBN13 == ISBN || m.ISBN10 == ISBN);
 
             // If the book already exists in the database an error is returned
             if (dataBook != null)
@@ -279,6 +342,30 @@ namespace BookExchange.Controllers
         private bool BookExists(Guid id)
         {
             return (_context.Book?.Any(e => e.BookID == id)).GetValueOrDefault();
+        }
+        private List<SelectListItem> classList()
+        {
+            // Creates a list of item groups
+            var selectListGroups = _context.Classes
+                    .Select(i => i.Grade)
+                    .Distinct()
+                    .ToDictionary(i => i,
+                        i => new SelectListGroup
+                        {
+                            Name = i.ToString() + "th Grade"
+                        });
+
+            // Groups classes by grade
+            var selectListItems = _context.Classes
+                        .Select(i => new SelectListItem
+                        {
+                            Text = i.Name,
+                            Value = i.ClassID.ToString(),
+                            Group = selectListGroups[i.Grade]
+                        })
+                        .ToList();
+
+            return selectListItems;
         }
     }
 }
