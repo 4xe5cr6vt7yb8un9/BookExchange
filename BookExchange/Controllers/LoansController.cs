@@ -30,9 +30,22 @@ namespace BookExchange.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
+            // Gathers book titles
+            var books = _context.Book.Where(x => _context.Loans.Any(s => s.BookID == x.BookID));
+
             // Creates list of all loans present in database
             var loans = from loan in _context.Loans
                         select loan;
+
+            // Adds donated book title to view
+            await loans.ForEachAsync(loan =>
+            {
+                var book = books.FirstOrDefault(book => book.BookID == loan.BookID);
+                if (book != null)
+                {
+                    loan.title = book.Title;
+                }
+            });
 
             // Searches loans by ISBN is search query is present
             if (!String.IsNullOrEmpty(searchString))
@@ -44,7 +57,7 @@ namespace BookExchange.Controllers
             loans = loans.OrderByDescending(loans => loans.LoanDate);
 
             int pageSize = 11; // Amount of content to display on page
-            return View(await PaginatedList<Loans>.CreateAsync(loans.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Loans>.CreateAsync(loans, pageNumber ?? 1, pageSize));
         }
 
         // GET: Loans/Create
@@ -60,12 +73,23 @@ namespace BookExchange.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Loans/Create/{isbn?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LoanerName,LoanerEmail,ISBN,LoanDate")] Loans loans)
+        public async Task<IActionResult> Create([Bind("Id,LoanerName,LoanerEmail,LoanerPhone,ISBN,LoanDate")] Loans loans)
         {
+            var book = await _context.Book
+                                    .FirstOrDefaultAsync(x => x.ISBN13 == loans.ISBN || x.ISBN10 == loans.ISBN);
+
+            // Sends an error to the user if book does not exist
+            if (book == null)
+            {
+                ModelState.AddModelError("ISBN", "Can not find book in database");
+            }
+
             if (ModelState.IsValid)
             {
                 loans.Id = Guid.NewGuid(); // Creates a new GUID
                 loans.LoanDate = DateTime.Now; // Sets date to now
+                loans.BookID = book.BookID;
+
                 _context.Add(loans); // Adds new Loan to database
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Page));
@@ -120,5 +144,11 @@ namespace BookExchange.Controllers
         {
             return (_context.Loans?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+    }
+
+    internal class Bob
+    {
+        public string Title { get; set; }
+        public Guid ID { get; set; }
     }
 }
