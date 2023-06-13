@@ -1,17 +1,26 @@
 ﻿using BookExchange.Models;
 using Google.Apis.Books.v1;
-using Google.Apis.Books.v1.Data;
 using Google.Apis.Services;
-using NuGet.Protocol;
 using System.Diagnostics;
-using System.Text;
 
 namespace BookExchange.Actions
 {
     public static class ISBNScraper
     {
         // Google API key for ISBN lookup
-        private static readonly String apiKey = "AIzaSyCl83uxcTL1Zg4p_mxUajhJhEHsjgUy94k";
+        private static String apiKey = "";
+
+        /// <summary>
+        /// Sets the Google API Key to use
+        /// </summary>
+        /// <param name="key">The API Key</param>
+        public static void SetKey(String key)
+        {
+            if (!string.IsNullOrEmpty(key))
+            {
+                apiKey = key;
+            }
+        }
 
         /// <summary>
         /// Function to download book cover.
@@ -47,22 +56,26 @@ namespace BookExchange.Actions
         {
             try
             {
-                BookApi GBooks = new(apiKey); // Creates a book api instance with given key
-                List<ISBNData> results = GBooks.Search("ISBN:" + ISBN); // Queries book database with given ISBN
+                if (!string.IsNullOrEmpty(apiKey))
+                {
+                    BookApi GBooks = new(apiKey); // Creates a book api instance with given key
+                    List<ISBNData> results = GBooks.Search("ISBN:" + ISBN); // Queries book database with given ISBN
 
-                // Queries results to remove books that dont match given ISBN
-                IEnumerable<ISBNData> bookQuery =
-                    from book in results
-                    where book != null
-                    from identity in book.IndustryIdentifiers
-                    where identity.Identifier.Equals(ISBN)
-                    select book;
+                    // Queries results to remove books that dont match given ISBN
+                    IEnumerable<ISBNData> bookQuery =
+                        from book in results
+                        where book != null
+                        from identity in book.IndustryIdentifiers
+                        where identity.Identifier.Equals(ISBN)
+                        select book;
 
-                // Returns book info if found else returns null
-                if (bookQuery.Any())
-                    return bookQuery.First();
-                else
-                    return null;
+                    // Returns book info if found else returns null
+                    if (bookQuery.Any())
+                        return bookQuery.First();
+                    else
+                        return null;
+                }
+                return null;
             }
             catch (Exception)
             {

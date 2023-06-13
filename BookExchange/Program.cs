@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+using BookExchange.Actions;
 using BookExchange.Data;
+using Microsoft.EntityFrameworkCore;
 
 // Creates Web App and connects to SQL Server
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,17 @@ builder.Services.AddDbContext<BookExchangeContext>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+try
+{
+    StreamReader sr = new("ApiKey");
+    //Read the first line of text
+    ISBNScraper.SetKey(sr.ReadLine());
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Unable to Read file: " + ex.Message);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
