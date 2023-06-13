@@ -1,6 +1,8 @@
 ﻿using BookExchange.Models;
 using Google.Apis.Books.v1;
+using Google.Apis.Books.v1.Data;
 using Google.Apis.Services;
+using NuGet.Protocol;
 using System.Diagnostics;
 using System.Text;
 
@@ -110,24 +112,37 @@ namespace BookExchange.Actions
                 if (correctBook != null)
                 {
                     Book newBook = new();
-                    StringBuilder authors = new("");
+                    String authors = "";
 
                     // Convert Author list into a single string
                     foreach (var author in correctBook.Authors.ToArray())
                     {
-                        authors.Append(author + ", ");
+                        authors += ", " + author;
                     }
 
+                    // Finds ISBN numbers from book data
+                    var isbn13 =
+                                from identity in correctBook.IndustryIdentifiers
+                                where identity.Type == "ISBN_13"
+                                select identity.Identifier;
+                    var isbn10 =
+                                from identity in correctBook.IndustryIdentifiers
+                                where identity.Type == "ISBN_10"
+                                select identity.Identifier;
+
                     // Casts collected information to book model
-                    newBook.ISBN = ISBN;
-                    newBook.Author = authors.ToString();
+                    newBook.ISBN13 = isbn13.FirstOrDefault();
+                    newBook.ISBN10 = isbn10.FirstOrDefault();
+
+                    newBook.Author = authors.Remove(0, 1).Trim();
                     newBook.Title = correctBook.Title;
+                    newBook.Subtitle = correctBook.Subtitle;
                     newBook.Published = correctBook.Published_date;
                     newBook.Description = correctBook.Description;
 
                     // If book cover image exists, initiates download
                     if (correctBook.ImageLinks != null)
-                        await DownloadImage(correctBook.ImageLinks.Thumbnail, ISBN);
+                        await DownloadImage(correctBook.ImageLinks.Thumbnail, isbn13.FirstOrDefault());
 
                     return newBook;
                 }
