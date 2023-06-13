@@ -1,8 +1,21 @@
-﻿@model PaginatedList<BookExchange.Models.Book>
+﻿@model BookExchange.Models.BookClassIndex
 
 @{
     ViewData["Title"] = "Books";
     var modelNum = 0;
+
+    var Books = Model.Books;
+    var Classes = Model.Classes;
+    List<int> Grades = new();
+
+    @foreach (var item in Classes)
+    {
+        if (!Grades.Contains(item.Grade))
+        {
+            Grades.Add(item.Grade);
+        }
+    }
+    Grades.Sort();
 }
 
 <head>
@@ -22,80 +35,112 @@
                     <input type="submit" value="Search" class="SearchButton" />
                 </div>
             </form>
+
+            <div class="dropdown">
+                <button class="dropbtn">Class List</button>
+                <div class="dropdown-content out">
+                    @foreach (var n in Grades)
+                    {
+                        <div class="innerDropdown">
+                            <a>Grade @n</a>
+                            <div class="dropdown-content">
+                                @foreach (var item in Classes)
+                                {
+                                    if (item.Grade == n)
+                                    {
+                                        <a asp-action="Page"
+                                            asp-route-classSort="@item.ClassID"
+                                            asp-route-pageNumber="1"
+                                            asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
 
-        <table>
-            @foreach (var item in Model)
-            {
-                var ISBN = item.ISBN;
-
-                var imageSource = @"\data\thumbnails\" + ISBN + ".jpg";
-                var defaultImage = @"\data\thumbnails\default.png";
-
-                var Start = "<tr>";
-                var End = "</tr>";
-
-                if (modelNum == 0 || modelNum == 2 || modelNum == 4)
+        <div class="horizontalScroll">
+            <table>
+                @foreach (var item in Books)
                 {
-                    @Html.Raw(Start);
-                }
+                    var ISBN = item.ISBN13;
 
-                <td>
-                    <div class="card hover">
-                        <img id="imgSrc" src=@imageSource onerror="loadDefa()">
-                        <img id="defa" src=@defaultImage style="display: none">
+                    var imageSource = @"\data\thumbnails\" + ISBN + ".jpg";
+                    var defaultImage = @"\data\thumbnails\default.png";
 
-                        <div class="bookInfo">
-                            <h2 id="bookTitle">@Html.DisplayFor(modelItem => item.Title)</h2>
-                            <h4 id="author">@Html.DisplayFor(modelItem => item.Author)</h4>
-                            <p id="ISBN">ISBN: @Html.DisplayFor(modelItem => item.ISBN)</p>
+                    var Start = "<tr>";
+                    var End = "</tr>";
+
+                    if (modelNum == 0 || modelNum == 2 || modelNum == 4)
+                    {
+                        @Html.Raw(Start)
+                        ;
+                    }
+
+                    <td>
+                        <div class="card hover">
+                            <img id="imgSrc" src=@imageSource onerror="loadDefa()">
+                            <img id="defa" src=@defaultImage style="display: none">
+
+                            <div class="bookInfo">
+                                <div class="titleContainer">
+                                    <h2 class="bookTitle">@Html.DisplayFor(modelItem => item.Title)</h2>
+                                    <h6 class="bookSubtitle">@Html.DisplayFor(modelItem => item.Subtitle)</h6>
+                                </div>
+                                
+                                <h6 id="author">By @Html.DisplayFor(modelItem => item.Author)</h6>
+                                <p class="ISBN">ISBN-13: @Html.DisplayFor(modelItem => item.ISBN13)</p>
+                                <p class="ISBN">ISBN-10: @Html.DisplayFor(modelItem => item.ISBN10)</p>
+                            </div>
+
+                            <a class="button" asp-action="Details" asp-route-id="@item.BookID">Details</a>
                         </div>
+                    </td>
 
-                        <a class="button" asp-action="Details" asp-route-id="@item.BookID">Details</a>
-                    </div>
-                </td>
+                    if (modelNum == 1 || modelNum == 3 || modelNum == 5)
+                    {
+                        @Html.Raw(End)
+                        ;
+                    }
 
-                if (modelNum == 1 || modelNum == 3 || modelNum == 5)
-                {
-                    @Html.Raw(End);
+                    modelNum += 1;
                 }
 
-                modelNum += 1;
-            }
-
-        </table>
+            </table>
+        </div>
 
         @{
-            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+            var prevDisabled = !Books.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Books.HasNextPage ? "disabled" : "";
             var currentPage = "";
         }
 
         <div class="pagination">
             <a asp-action="Page"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-pageNumber="@(Books.PageIndex - 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                class="@prevDisabled">
                 &laquo;
             </a>
 
-            @for (var i=1; i<=@Model.TotalPages; i++)
+            @for (var i = 1; i <= @Books.TotalPages; i++)
             {
-                currentPage = (i == Model.PageIndex) ? "active" : "";
+                currentPage = (i == Books.PageIndex) ? "active" : "";
 
                 <a asp-action="Page"
-                    asp-route-sortOrder="@ViewData["CurrentSort"]"
-                    asp-route-pageNumber="@i"
-                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                    class="@currentPage">
-                        @i.ToString()
+               asp-route-pageNumber="@i"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="@currentPage">
+                    @i.ToString()
                 </a>
             }
-            
+
             <a asp-action="Page"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-pageNumber="@(Books.PageIndex + 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                class="@nextDisabled">
                 &raquo;
