@@ -7,6 +7,10 @@ namespace BookExchange.Models
         public int PageIndex { get; private set; } // The current page
         public int TotalPages { get; private set; } // The total number of pages
 
+        public bool HasPreviousPage => PageIndex > 1; // Function to see if there is a previous page
+
+        public bool HasNextPage => PageIndex < TotalPages; // Function to see if there is a next page
+
         // Creates PaginatedList instance
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
@@ -15,10 +19,6 @@ namespace BookExchange.Models
 
             this.AddRange(items);
         }
-
-        public bool HasPreviousPage => PageIndex > 1; // Function to see if there is a previous page
-
-        public bool HasNextPage => PageIndex < TotalPages; // Function to see if there is a next page
 
         // Creates Page List
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
