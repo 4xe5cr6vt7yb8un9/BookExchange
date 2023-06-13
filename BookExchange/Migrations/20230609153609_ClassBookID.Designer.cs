@@ -4,6 +4,7 @@ using BookExchange.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookExchange.Migrations
 {
     [DbContext(typeof(BookExchangeContext))]
-    partial class BookExchangeContextModelSnapshot : ModelSnapshot
+    [Migration("20230609153609_ClassBookID")]
+    partial class ClassBookID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,20 +37,12 @@ namespace BookExchange.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ISBN10")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("ISBN13")
+                    b.Property<string>("ISBN")
                         .IsRequired()
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("Published")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Subtitle")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -57,10 +51,7 @@ namespace BookExchange.Migrations
 
                     b.HasKey("BookID");
 
-                    b.HasIndex("ISBN10")
-                        .IsUnique();
-
-                    b.HasIndex("ISBN13")
+                    b.HasIndex("ISBN")
                         .IsUnique();
 
                     b.ToTable("Book");
@@ -96,10 +87,6 @@ namespace BookExchange.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Teacher")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ClassID");
 
                     b.ToTable("Classes");
@@ -111,8 +98,10 @@ namespace BookExchange.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BookID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<DateTime>("LoanDate")
                         .HasColumnType("datetime2");
@@ -122,10 +111,6 @@ namespace BookExchange.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LoanerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LoanerPhone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
