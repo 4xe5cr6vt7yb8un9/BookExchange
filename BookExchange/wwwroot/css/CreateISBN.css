@@ -37,6 +37,8 @@ html {
 
 .row {
     margin-top: 8vh;
+    --bs-gutter-x: 0;
+    justify-content: center;
 }
 
 #input {
@@ -46,13 +48,20 @@ html {
 
 .col-md-4 {
     position: relative;
-    left: 25%;
     width: 45% !important;
+}
+    .col-md-4 form {
+        display: grid;
+        align-content: space-evenly;
+        justify-items: center;
+    }
+
+form-group a {
+    color: red;
 }
 
 .LoanSubmit {
     position: relative;
-    left: 40%;
 }
 
 .w3-input {
