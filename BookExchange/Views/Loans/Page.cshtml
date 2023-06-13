@@ -43,7 +43,9 @@
                                 @Html.DisplayFor(modelItem => item.LoanerEmail)
                             </td>
                             <td>
-                                <a href="/Books/Details?ISBN=@Html.DisplayFor(modelItem => item.ISBN)">@Html.DisplayFor(modelItem => item.ISBN)</a>
+                                <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookID">
+                                    @Html.DisplayFor(modelItem => item.title)
+                                </a>
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.LoanDate)
