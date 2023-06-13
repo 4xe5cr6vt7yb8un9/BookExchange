@@ -2,22 +2,20 @@
 
 $(document).ready(function () {
     $(".disabled").removeAttr("href")
-    centerMain()
 
-    $(window).resize(function () {
-        centerMain()
-    });
-
-    function centerMain() {
-        let main = document.querySelector('.main')
-        let container = document.querySelector('.container')
-        let marg = ((container.offsetHeight - 10) / 2 - main.offsetHeight / 2) + 'px'
-
-        $(".main").css("top", marg)
-    }
+    innerDrop();
 })
 
 function loadDefa() {
     var defaSrc = $("#defa").attr('src')
     $("#imgSrc").attr('src', defaSrc)
 }
+
+function innerDrop() {
+    $(".innerDropdown").hover(function () {
+        $(this).children("div").css("display", "block")
+    }, function () {
+        $(this).children("div").css("display", "none")
+    })
+};
+
