@@ -20,6 +20,7 @@
     height: 100%;
     padding: 10px;
 }
+
 .row {
     height: 100%;
 }
@@ -50,8 +51,13 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
 }
+    .col-sm-10:last-of-type {
+        overflow-y: revert;
+        overflow-x: revert;
+    }
 
 .button {
+    user-select: none;
     transition-duration: 0.2s;
     font-family: 'Poppins', sans-serif;
     color: white;
@@ -68,6 +74,63 @@ body {
 }
 
     .button:hover {
+        background-color: #00aeff;
+        color: white;
+    }
+
+.classItem {
+    transition-duration: 0.2s;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: #005493;
+    display: inline-block;
+    margin: 10px;
+    margin-left: 0px;
+    position: relative;
+    border-bottom: 1px dotted black;
+    user-select: none;
+}
+
+    .classItem .tooltiptext {
+        visibility: hidden;
+        width: max-content;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 35%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .classItem .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+    .classItem:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+    .classItem:hover {
         background-color: #00aeff;
         color: white;
     }
